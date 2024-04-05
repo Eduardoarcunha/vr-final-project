@@ -1,25 +1,38 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.XR.Content.Interaction;
 
 public class BoatController : MonoBehaviour
 {
-    public float accelerationSpeed = 5.0f;
-    public float decelerationSpeed = 5.0f;
-    public float turnSpeed = 100.0f;
+    [Header("Boat Movement")]
+    public float accelerationSpeed;
+    public float decelerationSpeed;
+    public float turnSpeed;
+    public float backwardSpeedLimit;
     private float currentSpeed = 0.0f;
+
+    [Header("Boat Control")]
+    public XRSlider engineSlider;
+    public XRKnob steeringKnob;
+
 
     public GameObject boatFront;
 
     void Update()
     {
-        float verticalInput = Input.GetAxis("Vertical"); // W and S or Up and Down Arrow
-        float horizontalInput = Input.GetAxis("Horizontal"); // A and D or Left and Right Arrow
+        // float verticalInput = Input.GetAxis("Vertical");
+        // float horizontalInput = Input.GetAxis("Horizontal");
+
+        float verticalInput = engineSlider.value * 2 - 1;
+        float horizontalInput = steeringKnob.value * 2 - 1;
+
 
         if (verticalInput != 0)
         {
             currentSpeed += verticalInput * accelerationSpeed * Time.deltaTime;
-            currentSpeed = Mathf.Clamp(currentSpeed, -accelerationSpeed, accelerationSpeed);
+            float maxBackwardSpeed = accelerationSpeed * backwardSpeedLimit;
+            currentSpeed = Mathf.Clamp(currentSpeed, -maxBackwardSpeed, accelerationSpeed);
         }
         else
         {
@@ -38,5 +51,6 @@ public class BoatController : MonoBehaviour
         Vector3 forward = boatFront.transform.position - transform.position;
         transform.position += forward * Time.deltaTime * currentSpeed;
         transform.Rotate(Vector3.up, Time.deltaTime * turnSpeed * horizontalInput);
+
     }
 }
