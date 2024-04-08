@@ -116,7 +116,7 @@ namespace UnityEngine.XR.Content.Interaction
             m_Handle.localPosition = handlePos;
         }
 
-        void SetValue(float value)
+        protected virtual void SetValue(float value)
         {
             m_Value = value;
             m_OnValueChange.Invoke(m_Value);
