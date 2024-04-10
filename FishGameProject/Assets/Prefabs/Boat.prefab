@@ -257,6 +257,9 @@ MonoBehaviour:
   maxYRotationAngle: 3
   maxZRotationAngle: 1
   changeInterval: 2
+  rotationSpeed: 0.5
+  bobbingSpeed: 0.5
+  bobbingAmount: 0.1
 --- !u!54 &4457126992865456618
 Rigidbody:
   m_ObjectHideFlags: 0

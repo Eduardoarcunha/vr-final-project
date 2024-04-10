@@ -4,42 +4,56 @@ using UnityEngine;
 
 public class BoatFloater : MonoBehaviour
 {
-    public float maxXRotationAngle = 5f; // Max rotation angle around the X-axis
-    public float maxYRotationAngle = 5f; // Max rotation angle around the Y-axis
-    public float maxZRotationAngle = 5f; // Max rotation angle around the Z-axis
-    public float changeInterval = 2f;    // Time in seconds between rotation changes
+    [Header("Rotation Settings")]
+    public float maxXRotationAngle;
+    public float maxYRotationAngle;
+    public float maxZRotationAngle;
+    public float changeInterval = 2f;
+    public float rotationSpeed = 0.5f;
+
+    [Header("Bobbing Settings")]
+    public float bobbingSpeed = 1f;
+    public float bobbingAmount = 0.5f;
 
     private Quaternion targetRotation;
+    private Quaternion startRotation;
     private float timer;
+    private float startHeight;
 
     void Start()
     {
-        targetRotation = transform.rotation;
+        startRotation = transform.rotation;
+        targetRotation = GenerateRandomRotation();
+        startHeight = transform.position.y;
     }
 
     void Update()
     {
-        // Update the timer
         timer += Time.deltaTime;
 
-        // If the timer exceeds the interval, calculate a new rotation
+        // Update rotation
         if (timer > changeInterval)
         {
             timer = 0f;
+            startRotation = transform.rotation;
             targetRotation = GenerateRandomRotation();
         }
 
         // Smoothly rotate towards the target rotation
-        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime / changeInterval);
+        float lerpFactor = Mathf.Clamp01(timer / changeInterval);
+        transform.rotation = Quaternion.Lerp(startRotation, targetRotation, lerpFactor * rotationSpeed);
+
+        // Bobbing effect
+        float newY = Mathf.Sin(Time.time * bobbingSpeed) * bobbingAmount + startHeight;
+        transform.position = new Vector3(transform.position.x, newY, transform.position.z);
     }
 
     Quaternion GenerateRandomRotation()
     {
-        // Random rotation around each axis using respective max rotation angles
         float xRot = Random.Range(-maxXRotationAngle, maxXRotationAngle);
         float yRot = Random.Range(-maxYRotationAngle, maxYRotationAngle);
         float zRot = Random.Range(-maxZRotationAngle, maxZRotationAngle);
 
-        return Quaternion.Euler(xRot, yRot, zRot) * transform.rotation;
+        return Quaternion.Euler(xRot, yRot, zRot);
     }
 }
