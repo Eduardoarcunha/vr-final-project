@@ -9,6 +9,8 @@ EditorBuildSettings:
     path: Assets/Scenes/BoatWater.unity
     guid: 99c9720ab356a0642a771bea13969a05
   m_configObjects:
+    com.unity.input.settings: {fileID: 11400000, guid: 34b6cf4e70c78b74bb8af5a465f43f52,
+      type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 7f552e52de5a32940bec6cac4b3846dd,
       type: 2}
     com.unity.xr.openxr.settings4: {fileID: 11400000, guid: b0b965edd446fd344b6a4f1ca71a99c3,
