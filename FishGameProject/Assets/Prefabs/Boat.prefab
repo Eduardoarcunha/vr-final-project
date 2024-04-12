@@ -241,6 +241,8 @@ MonoBehaviour:
   engineSlider: {fileID: 7966013696874682084}
   steeringKnob: {fileID: 4307956312793688370}
   boatFront: {fileID: 1770698686112832231}
+  verticalInput: 0
+  horizontalInput: 0
 --- !u!114 &8937431768646061693
 MonoBehaviour:
   m_ObjectHideFlags: 0
