@@ -6,7 +6,7 @@ public class BoatFloater : MonoBehaviour
 {
     [Header("Rotation Settings")]
     public float maxXRotationAngle;
-    public float maxYRotationAngle;
+    // public float maxYRotationAngle; // This might still be shown for potential future use or remove if not needed at all.
     public float maxZRotationAngle;
     public float changeInterval = 2f;
     public float rotationSpeed = 0.5f;
@@ -39,9 +39,10 @@ public class BoatFloater : MonoBehaviour
             targetRotation = GenerateRandomRotation();
         }
 
-        // Smoothly rotate towards the target rotation
+        // Smoothly rotate towards the target rotation, preserving Y-axis rotation
         float lerpFactor = Mathf.Clamp01(timer / changeInterval);
-        transform.rotation = Quaternion.Lerp(startRotation, targetRotation, lerpFactor * rotationSpeed);
+        Quaternion tempRotation = Quaternion.Lerp(startRotation, targetRotation, lerpFactor * rotationSpeed);
+        transform.rotation = new Quaternion(tempRotation.x, startRotation.y, tempRotation.z, tempRotation.w);
 
         // Bobbing effect
         float newY = Mathf.Sin(Time.time * bobbingSpeed) * bobbingAmount + startHeight;
@@ -51,7 +52,8 @@ public class BoatFloater : MonoBehaviour
     Quaternion GenerateRandomRotation()
     {
         float xRot = Random.Range(-maxXRotationAngle, maxXRotationAngle);
-        float yRot = Random.Range(-maxYRotationAngle, maxYRotationAngle);
+        // Keep the current Y rotation
+        float yRot = transform.rotation.eulerAngles.y;
         float zRot = Random.Range(-maxZRotationAngle, maxZRotationAngle);
 
         return Quaternion.Euler(xRot, yRot, zRot);

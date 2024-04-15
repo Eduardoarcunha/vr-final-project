@@ -21,16 +21,25 @@ public class BoatController : MonoBehaviour
     public float verticalInput;
     public float horizontalInput;
 
+    [Header("Discrete Steering")]
+    public int steeringSteps = 5;  // Number of discrete steps for steering
+
     void Update()
     {
         verticalInput = engineSlider.value * 2 - 1;
-        horizontalInput = steeringKnob.value * 2 - 1;
+        horizontalInput = QuantizeInput(steeringKnob.value * 2 - 1, steeringSteps);
 
         // Movement logic
         HandleMovement(verticalInput);
 
         // Turning logic
         transform.Rotate(Vector3.up, Time.deltaTime * turnSpeed * horizontalInput);
+    }
+
+    private float QuantizeInput(float input, int steps)
+    {
+        float stepSize = 2f / (steps - 1);
+        return Mathf.Round(input / stepSize) * stepSize;
     }
 
     private void HandleMovement(float verticalInput)
