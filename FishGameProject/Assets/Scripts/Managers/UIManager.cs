@@ -5,22 +5,34 @@ using UnityEngine.InputSystem;
 
 public class UIManager : MonoBehaviour
 {
+    public static UIManager instance;
+
     public Transform head;
     public float spawnDistance;
     public GameObject collectionPanel;
-    public InputActionProperty toggleCollectionPanel;
 
     public float positionLerpSpeed;
     public float rotationLerpSpeed;
 
+    void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    public void ToggleCollectionPanel()
+    {
+        collectionPanel.SetActive(!collectionPanel.activeSelf);
+    }
+
     void Update()
     {
-        // Toggle panel visibility
-        if (toggleCollectionPanel.action.WasPressedThisFrame())
-        {
-            collectionPanel.SetActive(!collectionPanel.activeSelf);
-        }
-
         if (collectionPanel.activeSelf)
         {
             // Calculate desired position
