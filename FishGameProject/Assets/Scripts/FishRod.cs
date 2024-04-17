@@ -11,19 +11,34 @@ public class FishRod : MonoBehaviour
     public Transform BaseCarretel;
     public Transform hook_t;
     public Transform hookPosInicial;
+    public Transform vara_t;
     public Rigidbody hook_rb;
+    private Vector3 previousPositionhook;
+    private Vector3 currentPositionhook;
+    private Vector3 previousVelocityhook;
+    private Vector3 currentVelocityhook;
+    private Vector3 velocityChange;
+    private Vector3 acceleration;
 
     private float previousRotation;
-    public float throwForce = 10f; // The force applied to throw the hook
-    public float moveSpeed = 1f;
+    private float throwForce; // The force applied to throw the hook
+    public float hookSpeed;
     private bool isHookThrown = false; // Flag to track if the hook is thrown
 
     private InputDevice targetDevice;
+
+    public InputDeviceCharacteristics controllerCharacteristics;
+
+    public AudioSource src;
+    public AudioClip RodandoVara;
+    public AudioClip HookVoltou;
 
 
     void Start()
     {
         previousRotation = BaseCarretel.localEulerAngles.y;
+        previousPositionhook = hook_rb.position;
+        previousVelocityhook = Vector3.zero;
         
         if (lineRenderer == null)
         {
@@ -31,38 +46,42 @@ public class FishRod : MonoBehaviour
             return;
         }
 
-        // List<InputDevice> devices = new List<InputDevice>();
-        // InputDeviceCharacteristics rightControllerCharacteristics = InputDeviceCharacteristics.Right | InputDeviceCharacteristics.Controller;
-        // InputDevices.GetDevicesWithCharacteristics(rightControllerCharacteristics, devices);    
-        // print(devices+ " " + devices.Count);
-        // foreach (var item in devices){
-        //     Debug.Log(item.name);
-        // }
+        TryInitialize();
 
-        // List<InputDevice> devices = new List<InputDevice>();
-        // InputDevices.GetDevices(devices);
-        // print(devices+ " " + devices.Count);
-        // print(devices[0].isValid);
-
-        InputDevice device = InputDevices.GetDeviceAtXRNode(XRNode.RightHand);
-        print(device.isValid);
-        if(device.isValid)
-        {
-            targetDevice = device;
-            Debug.Log("Hello");
-        }
-        else
-        {
-            Debug.Log("Não achei o XRNode.RightHand");
-        }
     }
-    void Update()
+
+    void TryInitialize(){
+
+        List<InputDevice> devices = new List<InputDevice>();
+        
+        InputDevices.GetDevicesWithCharacteristics(controllerCharacteristics, devices);
+
+        foreach (var item in devices)
+        {
+            // Debug.Log(item.name + item.characteristics);
+        }
+
+        if (devices.Count > 0)
+        {
+            targetDevice = devices[0];
+        }
+
+
+    }
+    void FixedUpdate()
     {
+        if (!targetDevice.isValid)
+		{
+			TryInitialize();
+		}
         // Update the positions of the line renderer to simulate the fish line
         UpdateLinePositions();
 
-        if (Input.GetKeyDown(KeyCode.Space) && !isHookThrown)
-        // if (primaryButtonValue && !isHookThrown)
+        ThrowForceCalculation();
+
+        targetDevice.TryGetFeatureValue(CommonUsages.primaryButton, out bool primaryButtonValue);
+        // if (Input.GetKeyDown(KeyCode.Space) && !isHookThrown)
+        if (primaryButtonValue && !isHookThrown)
         {
             ThrowHook();
         }
@@ -74,6 +93,33 @@ public class FishRod : MonoBehaviour
             RotateFishingRod();
             ReelInHook();
         }
+    }
+
+    void ThrowForceCalculation()
+    {
+        currentPositionhook = hook_rb.position;
+
+        currentVelocityhook = (currentPositionhook - previousPositionhook) / Time.deltaTime;
+
+        velocityChange = currentVelocityhook - previousVelocityhook;
+
+        if (velocityChange.magnitude <= 20){
+            throwForce = 2;
+        }
+
+        else if (velocityChange.magnitude <= 50){
+            throwForce = 8;
+        }
+
+        else if (velocityChange.magnitude <= 75){
+            throwForce = 15;
+        }
+        
+        previousPositionhook = currentPositionhook;
+        previousVelocityhook = currentVelocityhook;
+
+        // Debug.Log("Acceleration: " + velocityChange.magnitude);
+
     }
 
     void UpdateLinePositions()
@@ -91,6 +137,8 @@ public class FishRod : MonoBehaviour
     {
         hook_rb.isKinematic = false; // Ensure hook's Rigidbody is not kinematic to enable physics
         hook_rb.AddForce(transform.forward * throwForce, ForceMode.Impulse); // Apply forward force to throw the hook
+        // hook_rb.AddForce(transform.forward * velocityChange.magnitude, ForceMode.Impulse); // Apply forward force to throw the hook
+        // hook_rb.AddForce(transform.forward * 6, ForceMode.Impulse);
         isHookThrown = true; // Set flag to indicate hook is thrown
     }
 
@@ -105,14 +153,20 @@ public class FishRod : MonoBehaviour
         // Check if the rotation is clockwise or counterclockwise
         if (rotationDirection > 2f)
         {
-            hook_t.Translate(Vector3.forward * moveSpeed * Time.deltaTime);
+            // hook_t.Translate(Vector3.forward * hookSpeed * Time.deltaTime);
+            hook_t.Translate(Vector3.forward * 2 * Time.deltaTime);
+            src.clip = RodandoVara;
+            src.Play();
         }
         else if (rotationDirection < -2f)
         {
-            hook_t.Translate(Vector3.forward * -moveSpeed * Time.deltaTime);
+            hook_t.position = Vector3.Lerp(hook_t.position, vara_t.position, hookSpeed * Time.deltaTime);
+            src.clip = RodandoVara;
+            src.Play();
         }
         else
         {
+            src.Stop();
             // Debug.Log("No rotation" + rotationDirection);
         }
 
@@ -129,6 +183,8 @@ public class FishRod : MonoBehaviour
             hook_rb.isKinematic = true;
             hook_t.position = hookPosInicial.position; // Volta a posição para a inicial
             isHookThrown = false; // Reseta a flag
+            src.clip = HookVoltou;
+            src.Play();
         }
     }
 }
