@@ -39,7 +39,7 @@ public class FishRod : MonoBehaviour
         previousRotation = BaseCarretel.localEulerAngles.y;
         previousPositionhook = hook_rb.position;
         previousVelocityhook = Vector3.zero;
-        
+
         if (lineRenderer == null)
         {
             Debug.LogError("LineRenderer not assigned to FishRod script!");
@@ -50,10 +50,11 @@ public class FishRod : MonoBehaviour
 
     }
 
-    void TryInitialize(){
+    void TryInitialize()
+    {
 
         List<InputDevice> devices = new List<InputDevice>();
-        
+
         InputDevices.GetDevicesWithCharacteristics(controllerCharacteristics, devices);
 
         foreach (var item in devices)
@@ -71,9 +72,9 @@ public class FishRod : MonoBehaviour
     void FixedUpdate()
     {
         if (!targetDevice.isValid)
-		{
-			TryInitialize();
-		}
+        {
+            TryInitialize();
+        }
         // Update the positions of the line renderer to simulate the fish line
         UpdateLinePositions();
 
@@ -103,18 +104,21 @@ public class FishRod : MonoBehaviour
 
         velocityChange = currentVelocityhook - previousVelocityhook;
 
-        if (velocityChange.magnitude <= 20){
+        if (velocityChange.magnitude <= 20)
+        {
             throwForce = 2;
         }
 
-        else if (velocityChange.magnitude <= 50){
+        else if (velocityChange.magnitude <= 50)
+        {
             throwForce = 8;
         }
 
-        else if (velocityChange.magnitude <= 75){
+        else if (velocityChange.magnitude <= 75)
+        {
             throwForce = 15;
         }
-        
+
         previousPositionhook = currentPositionhook;
         previousVelocityhook = currentVelocityhook;
 
@@ -155,19 +159,16 @@ public class FishRod : MonoBehaviour
         {
             // hook_t.Translate(Vector3.forward * hookSpeed * Time.deltaTime);
             hook_t.Translate(Vector3.forward * 2 * Time.deltaTime);
-            src.clip = RodandoVara;
-            src.Play();
+            AudioManager.instance.PlaySound("FishRod");
         }
         else if (rotationDirection < -2f)
         {
             hook_t.position = Vector3.Lerp(hook_t.position, vara_t.position, hookSpeed * Time.deltaTime);
-            src.clip = RodandoVara;
-            src.Play();
+            AudioManager.instance.PlaySound("FishRod");
         }
         else
         {
-            src.Stop();
-            // Debug.Log("No rotation" + rotationDirection);
+            AudioManager.instance.StopSound("FishRod");
         }
 
         // Update the previous rotation for the next frame
@@ -183,8 +184,7 @@ public class FishRod : MonoBehaviour
             hook_rb.isKinematic = true;
             hook_t.position = hookPosInicial.position; // Volta a posição para a inicial
             isHookThrown = false; // Reseta a flag
-            src.clip = HookVoltou;
-            src.Play();
+            AudioManager.instance.PlaySound("PullHook");
         }
     }
 }
