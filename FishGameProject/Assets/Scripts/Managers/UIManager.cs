@@ -10,6 +10,7 @@ public class UIManager : MonoBehaviour
     public Transform head;
     public float spawnDistance;
     public GameObject collectionPanel;
+    public GameObject fishPanel;
 
     public float positionLerpSpeed;
     public float rotationLerpSpeed;
@@ -24,6 +25,7 @@ public class UIManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
     }
 
     public void ToggleCollectionPanel()

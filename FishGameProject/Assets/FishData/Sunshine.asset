@@ -14,3 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UIIcon: {fileID: 2800000, guid: 1bdc1c808726ee14085d079623da3178, type: 3}
   fishName: Sunshine
+  rarity: 3
+  habitat: 1

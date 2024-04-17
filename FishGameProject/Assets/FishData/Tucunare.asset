@@ -14,3 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UIIcon: {fileID: 2800000, guid: 8a3b8231c7408504494f740308b03556, type: 3}
   fishName: Tucunare
+  rarity: 0
+  habitat: 2

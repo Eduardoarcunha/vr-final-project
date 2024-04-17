@@ -3,19 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-using UnityEngine.UI;
-using TMPro;
 
-public class FishFrame : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
+public class HoverButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
+    [Header("UI References")]
     public CollectionCanvas collectionCanvas;
-
-    [Header("Fish Data")]
-    public FishData fishData;
-
-    [Header("UI Elements")]
-    public RawImage fishImage;
-    public TextMeshProUGUI fishName;
     public CanvasGroup canvasGroup;
 
     [Header("Scale and Alpha Settings")]
@@ -24,17 +16,9 @@ public class FishFrame : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     public float normalAlpha;
     public float hoveredAlpha;
 
+
     private bool isHovering = false;
-
-    private float scaleSpeed = 4f; // Adjust the speed of the scale transition
-
-    void Start()
-    {
-        fishImage.texture = fishData.UIIcon;
-        fishName.text = fishData.fishName;
-        transform.localScale = normalScale; // Initialize scale
-        canvasGroup.alpha = normalAlpha; // Initialize alpha
-    }
+    private float scaleSpeed = 4f;
 
     void Update()
     {
@@ -63,7 +47,6 @@ public class FishFrame : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        collectionCanvas.CloseCollectionPanel();
-        collectionCanvas.OpenFishInfoPanel(fishData);
+        collectionCanvas.ReturnToCollection();
     }
 }

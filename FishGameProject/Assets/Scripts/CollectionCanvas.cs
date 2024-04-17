@@ -4,8 +4,18 @@ using UnityEngine;
 
 public class CollectionCanvas : MonoBehaviour
 {
+    public Panel collectionPanel;
     public FishInfoPanel fishInfoPanel;
 
+    public void OpenCollectionPanel()
+    {
+        collectionPanel.OpenPanel();
+    }
+
+    public void CloseCollectionPanel()
+    {
+        collectionPanel.ClosePanel();
+    }
 
     public void OpenFishInfoPanel(FishData fishData)
     {
@@ -18,4 +28,9 @@ public class CollectionCanvas : MonoBehaviour
         fishInfoPanel.ClosePanel();
     }
 
+    public void ReturnToCollection()
+    {
+        CloseFishInfoPanel();
+        collectionPanel.OpenPanel();
+    }
 }
