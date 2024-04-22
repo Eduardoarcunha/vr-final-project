@@ -14,3 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UIIcon: {fileID: 2800000, guid: 23ba1af5b7f2cb04698eb9b65fa89680, type: 3}
   fishName: Celacanto
+  rarity: 2
+  habitat: 0
