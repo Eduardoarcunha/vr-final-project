@@ -9,6 +9,7 @@ TagManager:
   - Right Hand
   - Energy
   - Obstacle
+  - Hook
   layers:
   - Default
   - TransparentFX
