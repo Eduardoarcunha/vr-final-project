@@ -85,4 +85,5 @@ public class BoatController : MonoBehaviour
         newPosition.y = transform.position.y; // Lock the Y-axis position
         transform.position = newPosition;
     }
+
 }
