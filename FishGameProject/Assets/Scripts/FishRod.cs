@@ -23,7 +23,7 @@ public class FishRod : MonoBehaviour
     private float previousRotation;
     private float throwForce; // The force applied to throw the hook
     public float hookSpeed;
-    private bool isHookThrown = false; // Flag to track if the hook is thrown
+    public bool isHookThrown = false; // Flag to track if the hook is thrown
 
     private InputDevice targetDevice;
 
@@ -33,9 +33,15 @@ public class FishRod : MonoBehaviour
     public AudioClip RodandoVara;
     public AudioClip HookVoltou;
 
+    public GameObject ocean;
+    
+    private TriggerHook TH;
+
 
     void Start()
     {
+        TH = ocean.GetComponent<TriggerHook>();
+
         previousRotation = BaseCarretel.localEulerAngles.y;
         previousPositionhook = hook_rb.position;
         previousVelocityhook = Vector3.zero;
@@ -57,11 +63,6 @@ public class FishRod : MonoBehaviour
 
         InputDevices.GetDevicesWithCharacteristics(controllerCharacteristics, devices);
 
-        foreach (var item in devices)
-        {
-            // Debug.Log(item.name + item.characteristics);
-        }
-
         if (devices.Count > 0)
         {
             targetDevice = devices[0];
@@ -81,7 +82,6 @@ public class FishRod : MonoBehaviour
         ThrowForceCalculation();
 
         targetDevice.TryGetFeatureValue(CommonUsages.primaryButton, out bool primaryButtonValue);
-        // if (Input.GetKeyDown(KeyCode.Space) && !isHookThrown)
         if (primaryButtonValue && !isHookThrown)
         {
             ThrowHook();
@@ -122,8 +122,6 @@ public class FishRod : MonoBehaviour
         previousPositionhook = currentPositionhook;
         previousVelocityhook = currentVelocityhook;
 
-        // Debug.Log("Acceleration: " + velocityChange.magnitude);
-
     }
 
     void UpdateLinePositions()
@@ -141,8 +139,6 @@ public class FishRod : MonoBehaviour
     {
         hook_rb.isKinematic = false; // Ensure hook's Rigidbody is not kinematic to enable physics
         hook_rb.AddForce(transform.forward * throwForce, ForceMode.Impulse); // Apply forward force to throw the hook
-        // hook_rb.AddForce(transform.forward * velocityChange.magnitude, ForceMode.Impulse); // Apply forward force to throw the hook
-        // hook_rb.AddForce(transform.forward * 6, ForceMode.Impulse);
         isHookThrown = true; // Set flag to indicate hook is thrown
     }
 
@@ -181,9 +177,10 @@ public class FishRod : MonoBehaviour
         float distanceToRodTip = Vector3.Distance(hook_rb.position, transform.position);
         if (distanceToRodTip < 1.3f)
         {
-            hook_rb.isKinematic = true;
+            // hook_rb.isKinematic = true;
             hook_t.position = hookPosInicial.position; // Volta a posição para a inicial
             isHookThrown = false; // Reseta a flag
+            TH.isHookWater = false;
             AudioManager.instance.PlaySound("PullHook");
         }
     }
