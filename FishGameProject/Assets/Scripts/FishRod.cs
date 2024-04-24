@@ -6,19 +6,24 @@ using UnityEngine.XR;
 public class FishRod : MonoBehaviour
 {
     public LineRenderer lineRenderer;
-    public Transform MidPosition;
-    public Transform CarretelPosition;
-    public Transform BaseCarretel;
-    public Transform hook_t;
+
+    public Transform midPoint;
+
+    public Transform reelTransform;
+
+    public Transform hookTransform;
     public Transform hookPosInicial;
-    public Transform vara_t;
-    public Rigidbody hook_rb;
-    private Vector3 previousPositionhook;
-    private Vector3 currentPositionhook;
-    private Vector3 previousVelocityhook;
-    private Vector3 currentVelocityhook;
+
+    public Transform rodTransform;
+
+    public Rigidbody hookRigidbody;
+
+    private Vector3 previousHookPosition;
+    private Vector3 currentHookPosition;
+
+    private Vector3 previousVelocity;
+    private Vector3 currentVelocity;
     private Vector3 velocityChange;
-    private Vector3 acceleration;
 
     private float previousRotation;
     private float throwForce; // The force applied to throw the hook
@@ -29,22 +34,13 @@ public class FishRod : MonoBehaviour
 
     public InputDeviceCharacteristics controllerCharacteristics;
 
-    public AudioSource src;
-    public AudioClip RodandoVara;
-    public AudioClip HookVoltou;
-
-    public GameObject ocean;
-    
-    private TriggerHook TH;
-
+    public Hook hook;
 
     void Start()
     {
-        TH = ocean.GetComponent<TriggerHook>();
-
-        previousRotation = BaseCarretel.localEulerAngles.y;
-        previousPositionhook = hook_rb.position;
-        previousVelocityhook = Vector3.zero;
+        previousRotation = reelTransform.localEulerAngles.y;
+        previousHookPosition = hookRigidbody.position;
+        previousVelocity = Vector3.zero;
 
         if (lineRenderer == null)
         {
@@ -98,11 +94,11 @@ public class FishRod : MonoBehaviour
 
     void ThrowForceCalculation()
     {
-        currentPositionhook = hook_rb.position;
+        currentHookPosition = hookRigidbody.position;
 
-        currentVelocityhook = (currentPositionhook - previousPositionhook) / Time.deltaTime;
+        currentVelocity = (currentHookPosition - previousHookPosition) / Time.fixedDeltaTime;
 
-        velocityChange = currentVelocityhook - previousVelocityhook;
+        velocityChange = currentVelocity - previousVelocity;
 
         if (velocityChange.magnitude <= 20)
         {
@@ -119,8 +115,8 @@ public class FishRod : MonoBehaviour
             throwForce = 15;
         }
 
-        previousPositionhook = currentPositionhook;
-        previousVelocityhook = currentVelocityhook;
+        previousHookPosition = currentHookPosition;
+        previousVelocity = currentVelocity;
 
     }
 
@@ -129,37 +125,37 @@ public class FishRod : MonoBehaviour
         // Set the positions of the line renderer
         lineRenderer.positionCount = 3; // For simplicity, assume only two points: rod tip and hook
 
-        lineRenderer.SetPosition(0, CarretelPosition.position); // Carretel position
-        lineRenderer.SetPosition(1, MidPosition.position);
-        lineRenderer.SetPosition(2, hook_t.position); // Hook position
+        lineRenderer.SetPosition(0, reelTransform.position); // Carretel position
+        lineRenderer.SetPosition(1, midPoint.position);
+        lineRenderer.SetPosition(2, hookTransform.position); // Hook position
     }
 
 
     void ThrowHook()
     {
-        hook_rb.isKinematic = false; // Ensure hook's Rigidbody is not kinematic to enable physics
-        hook_rb.AddForce(transform.forward * throwForce, ForceMode.Impulse); // Apply forward force to throw the hook
+        hookRigidbody.isKinematic = false; // Ensure hook's Rigidbody is not kinematic to enable physics
+        hookRigidbody.AddForce(transform.forward * throwForce, ForceMode.Impulse); // Apply forward force to throw the hook
         isHookThrown = true; // Set flag to indicate hook is thrown
     }
 
     void RotateFishingRod()
     {
         // Get the current rotation of the object
-        float currentRotation = BaseCarretel.localEulerAngles.y;
+        float currentRotation = reelTransform.localEulerAngles.y;
 
         // Calculate the rotation direction (clockwise or counterclockwise) based on the change in angle
         float rotationDirection = currentRotation - previousRotation;
 
         // Check if the rotation is clockwise or counterclockwise
-        if (rotationDirection > 2f)
+        if (rotationDirection > 0)
         {
-            // hook_t.Translate(Vector3.forward * hookSpeed * Time.deltaTime);
-            hook_t.Translate(Vector3.forward * 2 * Time.deltaTime);
+            // hookTransform.Translate(Vector3.forward * hookSpeed * Time.fixedDeltaTime);
+            hookTransform.Translate(Vector3.forward * 2 * Time.fixedDeltaTime);
             AudioManager.instance.PlaySound("FishRod");
         }
-        else if (rotationDirection < -2f)
+        else if (rotationDirection < 0)
         {
-            hook_t.position = Vector3.Lerp(hook_t.position, vara_t.position, hookSpeed * Time.deltaTime);
+            hookTransform.position = Vector3.Lerp(hookTransform.position, rodTransform.position, hookSpeed * Time.fixedDeltaTime);
             AudioManager.instance.PlaySound("FishRod");
         }
         else
@@ -174,13 +170,13 @@ public class FishRod : MonoBehaviour
     void ReelInHook()
     {
         // Checagem para ver se está perto da vara
-        float distanceToRodTip = Vector3.Distance(hook_rb.position, transform.position);
+        float distanceToRodTip = Vector3.Distance(hookRigidbody.position, transform.position);
         if (distanceToRodTip < 1.3f)
         {
-            // hook_rb.isKinematic = true;
-            hook_t.position = hookPosInicial.position; // Volta a posição para a inicial
+            hookRigidbody.isKinematic = true;
+            hookTransform.position = hookPosInicial.position; // Volta a posição para a inicial
             isHookThrown = false; // Reseta a flag
-            TH.isHookWater = false;
+            hook.onWater = false;
             AudioManager.instance.PlaySound("PullHook");
         }
     }

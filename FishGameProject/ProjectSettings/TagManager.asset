@@ -10,6 +10,7 @@ TagManager:
   - Energy
   - Obstacle
   - Hook
+  - Fishing Rod
   layers:
   - Default
   - TransparentFX

@@ -7,25 +7,27 @@ public class TriggerHook : MonoBehaviour
     public Rigidbody hook_rb;
     public Transform hook_t;
     public bool isHookWater = false;
-    
+
     private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Hook"))
         {
-            if (other.CompareTag("Hook"))
-            {
-                hook_rb.isKinematic = true;
-                HookAgua();
-                isHookWater = true;
-            }
+            hook_rb.isKinematic = true;
+            HookAgua();
+            isHookWater = true;
         }
+    }
 
     void Update()
     {
-        if(isHookWater){
+        if (isHookWater)
+        {
             HookAgua();
         }
     }
 
-    void HookAgua(){
+    void HookAgua()
+    {
         Vector3 currentPosition = hook_t.position;
         currentPosition.y = 0;
         hook_t.position = currentPosition;
