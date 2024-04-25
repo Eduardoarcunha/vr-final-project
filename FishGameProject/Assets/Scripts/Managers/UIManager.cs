@@ -9,11 +9,14 @@ public class UIManager : MonoBehaviour
 
     public Transform head;
     public float spawnDistance;
-    public GameObject collectionPanel;
-    public GameObject fishPanel;
+    public GameObject collectionCanvas;
+    public GameObject minigameCanvas;
+    private CollectionCanvas collectionCanvasScript;
+    private MinigameCanvas minigameCanvasScript;
 
     public float positionLerpSpeed;
     public float rotationLerpSpeed;
+    public float minigameOffset;
 
     void Awake()
     {
@@ -26,27 +29,54 @@ public class UIManager : MonoBehaviour
             Destroy(gameObject);
         }
 
+        collectionCanvasScript = collectionCanvas.GetComponent<CollectionCanvas>();
+        minigameCanvasScript = minigameCanvas.GetComponent<MinigameCanvas>();
     }
 
-    public void ToggleCollectionPanel()
+    public void ToggleCollectionCanvas()
     {
-        collectionPanel.SetActive(!collectionPanel.activeSelf);
+        collectionCanvas.SetActive(!collectionCanvas.activeSelf);
+    }
+
+    public void ToggleMinigameCanvas()
+    {
+        minigameCanvas.SetActive(!minigameCanvas.activeSelf);
+    }
+
+    public void AddSliderValue(float value)
+    {
+        minigameCanvasScript.SetSliderValue(minigameCanvasScript.slider.value + value);
     }
 
     void Update()
     {
-        if (collectionPanel.activeSelf)
+        if (collectionCanvas.activeSelf)
         {
             // Calculate desired position
             Vector3 desiredPosition = head.position + (head.forward * spawnDistance);
 
             // Calculate desired rotation to face towards the player
-            Vector3 directionToFace = (head.position - collectionPanel.transform.position).normalized;
+            Vector3 directionToFace = (head.position - collectionCanvas.transform.position).normalized;
             Quaternion desiredRotation = Quaternion.LookRotation(directionToFace) * Quaternion.Euler(0, 180, 0); // Adjusting the rotation to face the player
 
             // Interpolate position and rotation to create a delay effect
-            collectionPanel.transform.position = Vector3.Lerp(collectionPanel.transform.position, desiredPosition, positionLerpSpeed * Time.deltaTime);
-            collectionPanel.transform.rotation = Quaternion.Slerp(collectionPanel.transform.rotation, desiredRotation, rotationLerpSpeed * Time.deltaTime);
+            collectionCanvas.transform.position = Vector3.Lerp(collectionCanvas.transform.position, desiredPosition, positionLerpSpeed * Time.deltaTime);
+            collectionCanvas.transform.rotation = Quaternion.Slerp(collectionCanvas.transform.rotation, desiredRotation, rotationLerpSpeed * Time.deltaTime);
+        }
+
+
+        if (minigameCanvas.activeSelf)
+        {
+            // Calculate desired position for minigameCanvas
+            Vector3 desiredPosition = head.position + (head.forward * spawnDistance) + (head.right * minigameOffset);
+
+            // Calculate desired rotation to face towards the player
+            Vector3 directionToFace = (head.position - minigameCanvas.transform.position).normalized;
+            Quaternion desiredRotation = Quaternion.LookRotation(directionToFace) * Quaternion.Euler(0, 180, 0);
+
+            // Interpolate position and rotation to create a delay effect
+            minigameCanvas.transform.position = Vector3.Lerp(minigameCanvas.transform.position, desiredPosition, positionLerpSpeed * Time.deltaTime);
+            minigameCanvas.transform.rotation = Quaternion.Slerp(minigameCanvas.transform.rotation, desiredRotation, rotationLerpSpeed * Time.deltaTime);
         }
     }
 }

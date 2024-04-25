@@ -8,8 +8,8 @@ using UnityEngine.XR.Interaction.Toolkit;
 public class FishRod : MonoBehaviour
 {
     [Header("Fish Line")]
-    public int totalLinePoints;
     public LineRenderer lineRenderer;
+    public int totalLinePoints;
 
     [Header("Reel Knob")]
     public GameObject reelGameObject;
@@ -32,8 +32,6 @@ public class FishRod : MonoBehaviour
     [Header("Other References")]
     public Transform rodTipTransform;
     public Transform rodMidTransform;
-    public InputDeviceCharacteristics controllerCharacteristics;
-    private InputDevice targetDevice;
     private XRGrabInteractable grabInteractable;
 
 
@@ -188,10 +186,12 @@ public class FishRod : MonoBehaviour
                 hookTransform.position = Vector3.MoveTowards(hookTransform.position, hookReturnPosition.position, speedFactor * Time.deltaTime);
             }
 
+            LevelManager.instance.ChangeSliderValue(.01f);
             AudioManager.instance.PlaySound("FishRod");
         }
         else if (knobDelta > 0)
         {
+            LevelManager.instance.ChangeSliderValue(-.01f);
             AudioManager.instance.PlaySound("FishRod");
         }
         else
@@ -213,6 +213,7 @@ public class FishRod : MonoBehaviour
             hook.onWater = false;
             hook.onFloor = false;
             AudioManager.instance.PlaySound("PullHook");
+            LevelManager.instance.EndMiniGame();
         }
     }
 }

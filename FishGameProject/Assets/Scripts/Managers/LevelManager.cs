@@ -28,6 +28,18 @@ public class LevelManager : MonoBehaviour
     public void StartMiniGame()
     {
         Debug.Log("Starting Mini Game");
+        UIManager.instance.ToggleMinigameCanvas();
+    }
+
+    public void EndMiniGame()
+    {
+        Debug.Log("Ending Mini Game");
+        UIManager.instance.ToggleMinigameCanvas();
+    }
+
+    public void ChangeSliderValue(float value)
+    {
+        UIManager.instance.AddSliderValue(value);
     }
 
 }

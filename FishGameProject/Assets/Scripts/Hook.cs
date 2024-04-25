@@ -16,7 +16,7 @@ public class Hook : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Water"))
+        if (other.CompareTag("Water") && !onWater && !onFloor)
         {
             onWater = true;
             rb.isKinematic = true;
@@ -24,6 +24,7 @@ public class Hook : MonoBehaviour
             transform.parent = null;
             currentPosition.y = 0;
             transform.position = currentPosition;
+            LevelManager.instance.StartMiniGame();
         }
     }
 

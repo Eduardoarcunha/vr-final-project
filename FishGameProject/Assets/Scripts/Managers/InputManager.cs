@@ -30,7 +30,7 @@ public class InputManager : MonoBehaviour
 
         if (menuPressed)
         {
-            UIManager.instance.ToggleCollectionPanel();
+            UIManager.instance.ToggleCollectionCanvas();
         }
     }
 
