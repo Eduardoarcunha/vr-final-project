@@ -2,181 +2,216 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR;
+using UnityEngine.XR.Content.Interaction;
+using UnityEngine.XR.Interaction.Toolkit;
 
 public class FishRod : MonoBehaviour
 {
+    [Header("Fish Line")]
+    public int totalLinePoints;
     public LineRenderer lineRenderer;
 
-    public Transform midPoint;
+    [Header("Reel Knob")]
+    public GameObject reelGameObject;
+    public float reelKnobTreshold;
+    private XRKnob reelKnob;
+    private float lastKnobValue;
 
-    public Transform reelTransform;
+    [Header("Hook")]
+    public GameObject hookGameObject;
+    public Transform hookReturnPosition;
 
-    public Transform hookTransform;
-    public Transform hookPosInicial;
-
-    public Transform rodTransform;
-
-    public Rigidbody hookRigidbody;
-
+    private Transform hookTransform;
+    private Hook hook;
+    private Rigidbody hookRigidbody;
+    private bool isHookThrown = false;
     private Vector3 previousHookPosition;
-    private Vector3 currentHookPosition;
+    private Vector3 currentHookVelocity;
+    private float throwForce;
 
-    private Vector3 previousVelocity;
-    private Vector3 currentVelocity;
-    private Vector3 velocityChange;
-
-    private float previousRotation;
-    private float throwForce; // The force applied to throw the hook
-    public float hookSpeed;
-    public bool isHookThrown = false; // Flag to track if the hook is thrown
-
-    private InputDevice targetDevice;
-
+    [Header("Other References")]
+    public Transform rodTipTransform;
+    public Transform rodMidTransform;
     public InputDeviceCharacteristics controllerCharacteristics;
+    private InputDevice targetDevice;
+    private XRGrabInteractable grabInteractable;
 
-    public Hook hook;
+
+    void Awake()
+    {
+        reelKnob = reelGameObject.GetComponent<XRKnob>();
+        hook = hookGameObject.GetComponent<Hook>();
+        hookTransform = hookGameObject.transform;
+        hookRigidbody = hookGameObject.GetComponent<Rigidbody>();
+
+        grabInteractable = GetComponent<XRGrabInteractable>();
+        grabInteractable.activated.AddListener(x => ThrowHook());
+    }
 
     void Start()
     {
-        previousRotation = reelTransform.localEulerAngles.y;
         previousHookPosition = hookRigidbody.position;
-        previousVelocity = Vector3.zero;
-
-        if (lineRenderer == null)
-        {
-            Debug.LogError("LineRenderer not assigned to FishRod script!");
-            return;
-        }
-
-        TryInitialize();
-
+        lastKnobValue = reelKnob.value;
     }
 
-    void TryInitialize()
+    void Update()
     {
 
-        List<InputDevice> devices = new List<InputDevice>();
-
-        InputDevices.GetDevicesWithCharacteristics(controllerCharacteristics, devices);
-
-        if (devices.Count > 0)
-        {
-            targetDevice = devices[0];
-        }
-
-
-    }
-    void FixedUpdate()
-    {
-        if (!targetDevice.isValid)
-        {
-            TryInitialize();
-        }
-        // Update the positions of the line renderer to simulate the fish line
         UpdateLinePositions();
 
-        ThrowForceCalculation();
-
-        targetDevice.TryGetFeatureValue(CommonUsages.primaryButton, out bool primaryButtonValue);
-        if (primaryButtonValue && !isHookThrown)
+        if (Mathf.Abs(reelKnob.value - lastKnobValue) > reelKnobTreshold)
         {
-            ThrowHook();
+            RotateFishingRod(reelKnob.value - lastKnobValue);
+            lastKnobValue = reelKnob.value;
         }
 
-        // Reel in the hook if it's thrown
-        if (isHookThrown)
-        {
-            // Rotate the fishing rod based on device rotation
-            RotateFishingRod();
-            ReelInHook();
-        }
+        CalculateThrowForce();
+        if (isHookThrown) ReelInHook();
     }
 
-    void ThrowForceCalculation()
-    {
-        currentHookPosition = hookRigidbody.position;
-
-        currentVelocity = (currentHookPosition - previousHookPosition) / Time.fixedDeltaTime;
-
-        velocityChange = currentVelocity - previousVelocity;
-
-        if (velocityChange.magnitude <= 20)
-        {
-            throwForce = 2;
-        }
-
-        else if (velocityChange.magnitude <= 50)
-        {
-            throwForce = 8;
-        }
-
-        else if (velocityChange.magnitude <= 75)
-        {
-            throwForce = 15;
-        }
-
-        previousHookPosition = currentHookPosition;
-        previousVelocity = currentVelocity;
-
-    }
 
     void UpdateLinePositions()
     {
-        // Set the positions of the line renderer
-        lineRenderer.positionCount = 3; // For simplicity, assume only two points: rod tip and hook
+        lineRenderer.positionCount = totalLinePoints;
 
-        lineRenderer.SetPosition(0, reelTransform.position); // Carretel position
-        lineRenderer.SetPosition(1, midPoint.position);
-        lineRenderer.SetPosition(2, hookTransform.position); // Hook position
+        Vector3 reelPosition = reelGameObject.transform.position;
+        Vector3 rodMidPosition = rodMidTransform.position;
+        Vector3 rodTipPosition = rodTipTransform.position;
+        Vector3 hookPosition = hookTransform.position;
+
+        // Define the proportion of points for each segment based on their expected complexity
+        int pointsReelToMid = Mathf.RoundToInt(totalLinePoints * 0.25f);
+        int pointsMidToTip = Mathf.RoundToInt(totalLinePoints * 0.25f);
+        int pointsTipToHook = totalLinePoints - pointsReelToMid - pointsMidToTip;
+
+        int pointIndex = 0;  // To keep track of the current point index
+
+        // Segment: Reel to Rod Mid
+        for (int i = 0; i < pointsReelToMid; i++)
+        {
+            float t = (float)i / (pointsReelToMid - 1);
+            Vector3 position = Vector3.Lerp(reelPosition, rodMidPosition, t);
+            lineRenderer.SetPosition(pointIndex++, position);
+        }
+
+        // Segment: Rod Mid to Rod Tip
+        for (int i = 0; i < pointsMidToTip; i++)
+        {
+            float t = (float)i / (pointsMidToTip - 1);
+            Vector3 position = Vector3.Lerp(rodMidPosition, rodTipPosition, t);
+            lineRenderer.SetPosition(pointIndex++, position);
+        }
+
+        if (isHookThrown)
+        {
+            for (int i = 0; i < pointsTipToHook; i++)
+            {
+                float t = (float)i / (pointsTipToHook - 1);
+                Vector3 position = CalculateBezierPoint(t, rodTipPosition, GetControlPoint(rodTipPosition, hookPosition), hookPosition);
+                lineRenderer.SetPosition(pointIndex++, position);
+            }
+        }
+        else
+        {
+            // Clear the points or retract to the rod tip if the hook has not been thrown
+            for (int i = 0; i < pointsTipToHook; i++)
+            {
+                lineRenderer.SetPosition(pointIndex++, rodTipPosition); // Set to rod tip position to "hide" it
+            }
+        }
+    }
+
+    Vector3 CalculateBezierPoint(float t, Vector3 p0, Vector3 p1, Vector3 p2)
+    {
+        float u = 1 - t;
+        float tt = t * t;
+        float uu = u * u;
+
+        Vector3 p = uu * p0; // First term
+        p += 2 * u * t * p1; // Second term
+        p += tt * p2; // Third term
+
+        return p;
+    }
+
+    Vector3 GetControlPoint(Vector3 rodTip, Vector3 hook)
+    {
+        Vector3 midPoint = (rodTip + hook) / 2;
+        Vector3 controlPoint = midPoint + new Vector3(0, -1, 0);
+        return controlPoint;
+    }
+
+
+    void CalculateThrowForce()
+    {
+        Vector3 hookPosition = hookRigidbody.position;
+        Vector3 velocity = (hookPosition - previousHookPosition) / Time.deltaTime;
+
+        throwForce = CalculateForceBasedOnVelocityChange(velocity - currentHookVelocity);
+
+        previousHookPosition = hookPosition;
+        currentHookVelocity = velocity;
+    }
+
+    private float CalculateForceBasedOnVelocityChange(Vector3 velocityChange)
+    {
+        float magnitude = velocityChange.magnitude;
+        if (magnitude <= 10) return 2;
+        if (magnitude <= 60) return 8;
+        return 10;
     }
 
 
     void ThrowHook()
     {
-        hookRigidbody.isKinematic = false; // Ensure hook's Rigidbody is not kinematic to enable physics
-        hookRigidbody.AddForce(transform.forward * throwForce, ForceMode.Impulse); // Apply forward force to throw the hook
-        isHookThrown = true; // Set flag to indicate hook is thrown
+        if (isHookThrown) return;
+        hookRigidbody.isKinematic = false;
+        hookRigidbody.AddForce(transform.forward * throwForce, ForceMode.Impulse);
+        isHookThrown = true;
     }
 
-    void RotateFishingRod()
+    void RotateFishingRod(float knobDelta)
     {
-        // Get the current rotation of the object
-        float currentRotation = reelTransform.localEulerAngles.y;
-
-        // Calculate the rotation direction (clockwise or counterclockwise) based on the change in angle
-        float rotationDirection = currentRotation - previousRotation;
-
-        // Check if the rotation is clockwise or counterclockwise
-        if (rotationDirection > 0)
+        if (knobDelta < 0)
         {
-            // hookTransform.Translate(Vector3.forward * hookSpeed * Time.fixedDeltaTime);
-            hookTransform.Translate(Vector3.forward * 2 * Time.fixedDeltaTime);
+            Vector3 targetPositionXZ = new Vector3(hookReturnPosition.position.x, hookTransform.position.y, hookReturnPosition.position.z);
+            float distanceXZ = Vector3.Distance(new Vector2(hookTransform.position.x, hookTransform.position.z),
+                                                new Vector2(hookReturnPosition.position.x, hookReturnPosition.position.z));
+
+            float speedFactor = Mathf.Max(0.5f, 5f - 4.5f * (distanceXZ / Vector3.Distance(hookReturnPosition.position, previousHookPosition)));
+            if (distanceXZ > 1f) // Prefer horizontal movement first
+            {
+                hookTransform.position = Vector3.MoveTowards(hookTransform.position, targetPositionXZ, speedFactor * Time.deltaTime);
+            }
+            else
+            {
+                hookTransform.position = Vector3.MoveTowards(hookTransform.position, hookReturnPosition.position, speedFactor * Time.deltaTime);
+            }
+
             AudioManager.instance.PlaySound("FishRod");
         }
-        else if (rotationDirection < 0)
+        else if (knobDelta > 0)
         {
-            hookTransform.position = Vector3.Lerp(hookTransform.position, rodTransform.position, hookSpeed * Time.fixedDeltaTime);
             AudioManager.instance.PlaySound("FishRod");
         }
         else
         {
             AudioManager.instance.StopSound("FishRod");
         }
-
-        // Update the previous rotation for the next frame
-        previousRotation = currentRotation;
     }
+
 
     void ReelInHook()
     {
-        // Checagem para ver se está perto da vara
-        float distanceToRodTip = Vector3.Distance(hookRigidbody.position, transform.position);
-        if (distanceToRodTip < 1.3f)
+        float distanceToRodTip = Vector3.Distance(hookRigidbody.position, hookReturnPosition.position);
+        if ((hook.onFloor || hook.onWater) && Mathf.Abs(distanceToRodTip) <= 1.5f)
         {
             hookRigidbody.isKinematic = true;
-            hookTransform.position = hookPosInicial.position; // Volta a posição para a inicial
-            isHookThrown = false; // Reseta a flag
+            hookGameObject.transform.parent = gameObject.transform;
+            hookTransform.position = hookReturnPosition.position;
+            isHookThrown = false;
             hook.onWater = false;
+            hook.onFloor = false;
             AudioManager.instance.PlaySound("PullHook");
         }
     }

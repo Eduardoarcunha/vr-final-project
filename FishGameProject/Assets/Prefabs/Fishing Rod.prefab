@@ -39,6 +39,7 @@ Transform:
   - {fileID: 6361790744146031896}
   - {fileID: 808175583535436010}
   - {fileID: 1671217534350346211}
+  - {fileID: 897657001390542501}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &2763259422307316247
@@ -285,17 +286,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7b905885c19d2940937357600ab871a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  totalLinePoints: 20
   lineRenderer: {fileID: 4805850301149560365}
-  midPoint: {fileID: 7121455060787163244}
-  reelTransform: {fileID: 829136340226145682}
-  hookTransform: {fileID: 6361790744146031896}
-  hookPosInicial: {fileID: 808175583535436010}
-  rodTransform: {fileID: 6714197552994899954}
-  hookRigidbody: {fileID: 3300695178569136245}
-  hookSpeed: 0.5
-  isHookThrown: 0
+  reelGameObject: {fileID: 4310606437630046595}
+  reelKnobTreshold: 0.01
+  hookGameObject: {fileID: 2954894983443229366}
+  hookReturnPosition: {fileID: 808175583535436010}
+  hookSpeed: 5
+  rodTipTransform: {fileID: 7009684440695785644}
+  rodMidTransform: {fileID: 391855821004771760}
   controllerCharacteristics: 576
-  hook: {fileID: 4544499945343276857}
 --- !u!1 &2813497521085802176
 GameObject:
   m_ObjectHideFlags: 0
@@ -307,7 +307,7 @@ GameObject:
   - component: {fileID: 4568154522931628772}
   - component: {fileID: 1835015097673861514}
   m_Layer: 0
-  m_Name: Lower Rod Handle
+  m_Name: Lower Rod Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -349,6 +349,39 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.5043385, y: 0.3578773, z: 1}
   m_Center: {x: -0.054339174, y: -0.03161886, z: 0.0000000012705202}
+--- !u!1 &2840363280733111776
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 897657001390542501}
+  m_Layer: 0
+  m_Name: Rod Transforms
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &897657001390542501
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2840363280733111776}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 7009684440695785644}
+  - {fileID: 391855821004771760}
+  m_Father: {fileID: 6714197552994899954}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2954894983443229366
 GameObject:
   m_ObjectHideFlags: 0
@@ -495,6 +528,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8828a34a9d2056419d620069f322fdf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onFloor: 0
   onWater: 0
 --- !u!1 &3024454714302519643
 GameObject:
@@ -506,7 +540,7 @@ GameObject:
   m_Component:
   - component: {fileID: 808175583535436010}
   m_Layer: 0
-  m_Name: Hook Start Position
+  m_Name: Hook Return Position
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -522,7 +556,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.23349997, y: 0, z: 1.4463}
-  m_LocalScale: {x: 0.029275201, y: 0.029275201, z: 0.029275201}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6714197552994899954}
@@ -554,7 +588,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4310606437630046595}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0.0000003496911, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 0.0000003496911, z: 0, w: 1}
   m_LocalPosition: {x: 0.0805, y: 0.0471, z: -0.5267}
   m_LocalScale: {x: 0.07, y: 0.005, z: 0.07}
   m_ConstrainProportionsScale: 0
@@ -716,7 +750,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_Handle: {fileID: 829136340226145682}
-  m_Value: 0
+  m_Value: 1
   m_ClampedMotion: 0
   m_MaxAngle: 1440
   m_MinAngle: -1440
@@ -864,6 +898,37 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
+--- !u!1 &4894256044092186263
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7009684440695785644}
+  m_Layer: 0
+  m_Name: Rod Tip Transform
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7009684440695785644
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4894256044092186263}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.2335, y: 0, z: 1.4463}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 897657001390542501}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5639644074550449573
 GameObject:
   m_ObjectHideFlags: 0
@@ -909,7 +974,7 @@ GameObject:
   - component: {fileID: 7121455060787163244}
   - component: {fileID: 7283032471179205553}
   m_Layer: 0
-  m_Name: Upper Rod Handle
+  m_Name: Upper Rod Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -962,7 +1027,7 @@ GameObject:
   - component: {fileID: 2823420721032982902}
   - component: {fileID: 67526452765354575}
   m_Layer: 0
-  m_Name: Grip Rod Handle
+  m_Name: Grip Rod Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1004,6 +1069,37 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.506135, y: 0.41354197, z: 0.96659344}
   m_Center: {x: -0.13783649, y: -0.025447454, z: 0.01670362}
+--- !u!1 &7373886138184996990
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 391855821004771760}
+  m_Layer: 0
+  m_Name: Rod Mid Transform
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &391855821004771760
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7373886138184996990}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.088, y: 0, z: 0.444}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 897657001390542501}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8951059732630222353
 GameObject:
   m_ObjectHideFlags: 0

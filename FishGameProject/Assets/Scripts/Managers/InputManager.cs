@@ -7,7 +7,10 @@ public class InputManager : MonoBehaviour
 {
     public static InputManager instance;
 
-    public InputActionProperty toggleCollectionPanel;
+    [SerializeField] private InputActionProperty menuButton;
+
+    public bool menuPressed { get; private set; }
+    public bool rightPrimaryPressed { get; private set; }
 
     void Awake()
     {
@@ -21,10 +24,11 @@ public class InputManager : MonoBehaviour
         }
     }
 
-
     void Update()
     {
-        if (toggleCollectionPanel.action.WasPressedThisFrame())
+        menuPressed = menuButton.action.WasPressedThisFrame() ? true : false;
+
+        if (menuPressed)
         {
             UIManager.instance.ToggleCollectionPanel();
         }

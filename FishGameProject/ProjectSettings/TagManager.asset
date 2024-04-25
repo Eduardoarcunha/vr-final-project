@@ -11,6 +11,8 @@ TagManager:
   - Obstacle
   - Hook
   - Fishing Rod
+  - Ground
+  - Water
   layers:
   - Default
   - TransparentFX
