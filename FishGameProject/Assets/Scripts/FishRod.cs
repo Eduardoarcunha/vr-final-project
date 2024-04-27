@@ -59,7 +59,7 @@ public class FishRod : MonoBehaviour
 
         if (Mathf.Abs(reelKnob.value - lastKnobValue) > reelKnobTreshold)
         {
-            RotateFishingRod(reelKnob.value - lastKnobValue);
+            if (isHookThrown) RotateFishingRod(reelKnob.value - lastKnobValue);
             lastKnobValue = reelKnob.value;
         }
 
@@ -186,12 +186,12 @@ public class FishRod : MonoBehaviour
                 hookTransform.position = Vector3.MoveTowards(hookTransform.position, hookReturnPosition.position, speedFactor * Time.deltaTime);
             }
 
-            LevelManager.instance.ChangeSliderValue(.01f);
+            LevelManager.instance.AddSliderValue(.03f, SliderEnum.Player);
             AudioManager.instance.PlaySound("FishRod");
         }
         else if (knobDelta > 0)
         {
-            LevelManager.instance.ChangeSliderValue(-.01f);
+            LevelManager.instance.AddSliderValue(-.03f, SliderEnum.Player);
             AudioManager.instance.PlaySound("FishRod");
         }
         else
@@ -199,7 +199,6 @@ public class FishRod : MonoBehaviour
             AudioManager.instance.StopSound("FishRod");
         }
     }
-
 
     void ReelInHook()
     {
@@ -213,6 +212,7 @@ public class FishRod : MonoBehaviour
             hook.onWater = false;
             hook.onFloor = false;
             AudioManager.instance.PlaySound("PullHook");
+            AudioManager.instance.StopSound("FishRod");
             LevelManager.instance.EndMiniGame();
         }
     }

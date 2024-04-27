@@ -30,7 +30,7 @@ public class InputManager : MonoBehaviour
 
         if (menuPressed)
         {
-            UIManager.instance.ToggleCollectionCanvas();
+            UIManager.instance.SetCollectionCanvasState(UIStateEnum.Toggle);
         }
     }
 

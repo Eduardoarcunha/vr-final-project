@@ -43614,6 +43614,11 @@ PrefabInstance:
       propertyPath: m_PresetInfoIsWorld
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4143714507895639205, guid: 9e21354cb00c7784bba4ccfe5e55e959,
+        type: 3}
+      propertyPath: sliderSmoothSpeed
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 4515824149981491018, guid: 9e21354cb00c7784bba4ccfe5e55e959,
         type: 3}
       propertyPath: m_Name
