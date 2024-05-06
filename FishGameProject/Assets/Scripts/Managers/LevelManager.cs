@@ -6,12 +6,20 @@ public class LevelManager : MonoBehaviour
 {
     public static LevelManager instance;
 
-    private bool isMiniGameActive = false;
+    [HideInInspector] public MinigameEnum currentMinigame = MinigameEnum.None;
     private Coroutine miniGameCoroutine;
 
+    [SerializeField] private FishRod fishRod;
+
+    [Header("Slider Minigame Settings")]
     [SerializeField] private float sliderMinigameSpeedFactor;
     [SerializeField] private Color sliderMinigameCloseColor;
     [SerializeField] private Color sliderMinigameFarColor;
+    [SerializeField] private float sliderTimerMax;
+    private float sliderTimer;
+    private float timeWithingCloseRange = 0;
+    private float minWithingCloseRangePercentage = 0.1f;
+
 
 
     private void Awake()
@@ -31,40 +39,62 @@ public class LevelManager : MonoBehaviour
     void Start()
     {
         AudioManager.instance.PlaySound("OceanSound");
+        sliderTimer = sliderTimerMax;
     }
 
     void Update()
     {
-        if (isMiniGameActive)
+        if (currentMinigame == MinigameEnum.Slider)
         {
+            if (sliderTimer <= 0 || timeWithingCloseRange > sliderTimerMax * minWithingCloseRangePercentage)
+            {
+                EndMiniGame();
+            }
             if (miniGameCoroutine == null)
             {
-                miniGameCoroutine = StartCoroutine(ChangeSliderValueOverTime());
+                miniGameCoroutine = StartCoroutine(ChangeFishSliderValueOverTime());
             }
 
             CheckSlidersDistance();
+
+            sliderTimer -= Time.deltaTime;
         }
     }
 
     public void StartMiniGame()
     {
-        isMiniGameActive = true;
+        currentMinigame = (MinigameEnum)Random.Range(0, 0); // None cant be selected
+
         UIManager.instance.SetMinigameCanvasState(UIStateEnum.Enable);
-        miniGameCoroutine = StartCoroutine(ChangeSliderValueOverTime());
+        miniGameCoroutine = StartCoroutine(ChangeFishSliderValueOverTime());
+        sliderTimer = sliderTimerMax;
+        timeWithingCloseRange = 0;
     }
 
     public void EndMiniGame()
     {
-        isMiniGameActive = false;
+        currentMinigame = MinigameEnum.None;
+        UIManager.instance.SetMinigameCanvasState(UIStateEnum.Disable);
+
         if (miniGameCoroutine != null)
         {
             StopCoroutine(miniGameCoroutine);
             miniGameCoroutine = null;
         }
-        UIManager.instance.SetMinigameCanvasState(UIStateEnum.Disable);
+
+        if (timeWithingCloseRange / sliderTimerMax > minWithingCloseRangePercentage)
+        {
+            Debug.Log("You Win!");
+        }
+        else
+        {
+            Debug.Log("You Lose!");
+        }
+
+        fishRod.ReelInHook();
     }
 
-    private IEnumerator ChangeSliderValueOverTime()
+    private IEnumerator ChangeFishSliderValueOverTime()
     {
         float targetValue = Random.Range(0f, 1f);
         float initialValue = UIManager.instance.GetSliderValue(SliderEnum.Fish);
@@ -98,6 +128,7 @@ public class LevelManager : MonoBehaviour
         if (Mathf.Abs(playerValue - fishValue) < 0.1f)
         {
             UIManager.instance.ColorFishBackground(sliderMinigameCloseColor);
+            timeWithingCloseRange += Time.deltaTime;
         }
         else
         {

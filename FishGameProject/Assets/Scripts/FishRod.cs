@@ -8,18 +8,18 @@ using UnityEngine.XR.Interaction.Toolkit;
 public class FishRod : MonoBehaviour
 {
     [Header("Fish Line")]
-    public LineRenderer lineRenderer;
-    public int totalLinePoints;
+    [SerializeField] private LineRenderer lineRenderer;
+    [SerializeField] private int totalLinePoints;
 
     [Header("Reel Knob")]
-    public GameObject reelGameObject;
-    public float reelKnobTreshold;
+    [SerializeField] private GameObject reelGameObject;
+    [SerializeField] private float reelKnobTreshold;
     private XRKnob reelKnob;
     private float lastKnobValue;
 
     [Header("Hook")]
-    public GameObject hookGameObject;
-    public Transform hookReturnPosition;
+    [SerializeField] private GameObject hookGameObject;
+    [SerializeField] private Transform hookReturnPosition;
 
     private Transform hookTransform;
     private Hook hook;
@@ -30,8 +30,8 @@ public class FishRod : MonoBehaviour
     private float throwForce;
 
     [Header("Other References")]
-    public Transform rodTipTransform;
-    public Transform rodMidTransform;
+    [SerializeField] private Transform rodTipTransform;
+    [SerializeField] private Transform rodMidTransform;
     private XRGrabInteractable grabInteractable;
 
 
@@ -64,7 +64,7 @@ public class FishRod : MonoBehaviour
         }
 
         CalculateThrowForce();
-        if (isHookThrown) ReelInHook();
+        if (isHookThrown) CheckReelInHook();
     }
 
 
@@ -170,29 +170,25 @@ public class FishRod : MonoBehaviour
 
     void RotateFishingRod(float knobDelta)
     {
+
         if (knobDelta < 0)
         {
-            Vector3 targetPositionXZ = new Vector3(hookReturnPosition.position.x, hookTransform.position.y, hookReturnPosition.position.z);
-            float distanceXZ = Vector3.Distance(new Vector2(hookTransform.position.x, hookTransform.position.z),
-                                                new Vector2(hookReturnPosition.position.x, hookReturnPosition.position.z));
-
-            float speedFactor = Mathf.Max(0.5f, 5f - 4.5f * (distanceXZ / Vector3.Distance(hookReturnPosition.position, previousHookPosition)));
-            if (distanceXZ > 1f) // Prefer horizontal movement first
-            {
-                hookTransform.position = Vector3.MoveTowards(hookTransform.position, targetPositionXZ, speedFactor * Time.deltaTime);
-            }
-            else
-            {
-                hookTransform.position = Vector3.MoveTowards(hookTransform.position, hookReturnPosition.position, speedFactor * Time.deltaTime);
-            }
-
-            LevelManager.instance.AddSliderValue(.03f, SliderEnum.Player);
             AudioManager.instance.PlaySound("FishRod");
+            if (LevelManager.instance.currentMinigame == MinigameEnum.Slider)
+            {
+                LevelManager.instance.AddSliderValue(.03f, SliderEnum.Player);
+                return;
+            }
+            PullLine();
         }
         else if (knobDelta > 0)
         {
-            LevelManager.instance.AddSliderValue(-.03f, SliderEnum.Player);
             AudioManager.instance.PlaySound("FishRod");
+            if (LevelManager.instance.currentMinigame == MinigameEnum.Slider)
+            {
+                LevelManager.instance.AddSliderValue(-.03f, SliderEnum.Player);
+                return;
+            }
         }
         else
         {
@@ -200,20 +196,43 @@ public class FishRod : MonoBehaviour
         }
     }
 
-    void ReelInHook()
+    void PullLine()
     {
+        Vector3 targetPositionXZ = new Vector3(hookReturnPosition.position.x, hookTransform.position.y, hookReturnPosition.position.z);
+        float distanceXZ = Vector3.Distance(new Vector2(hookTransform.position.x, hookTransform.position.z),
+                                            new Vector2(hookReturnPosition.position.x, hookReturnPosition.position.z));
+
+        float speedFactor = Mathf.Max(0.5f, 5f - 4.5f * (distanceXZ / Vector3.Distance(hookReturnPosition.position, previousHookPosition)));
+        if (distanceXZ > 1f) // Prefer horizontal movement first
+        {
+            hookTransform.position = Vector3.MoveTowards(hookTransform.position, targetPositionXZ, speedFactor * Time.deltaTime);
+        }
+        else
+        {
+            hookTransform.position = Vector3.MoveTowards(hookTransform.position, hookReturnPosition.position, speedFactor * Time.deltaTime);
+        }
+    }
+
+    void CheckReelInHook()
+    {
+        if (LevelManager.instance.currentMinigame != MinigameEnum.None) return; // Do not return if it is a minigame
+
         float distanceToRodTip = Vector3.Distance(hookRigidbody.position, hookReturnPosition.position);
         if ((hook.onFloor || hook.onWater) && Mathf.Abs(distanceToRodTip) <= 1.5f)
         {
-            hookRigidbody.isKinematic = true;
-            hookGameObject.transform.parent = gameObject.transform;
-            hookTransform.position = hookReturnPosition.position;
-            isHookThrown = false;
-            hook.onWater = false;
-            hook.onFloor = false;
-            AudioManager.instance.PlaySound("PullHook");
-            AudioManager.instance.StopSound("FishRod");
-            LevelManager.instance.EndMiniGame();
+            ReelInHook();
         }
+    }
+
+    public void ReelInHook()
+    {
+        hookRigidbody.isKinematic = true;
+        hookGameObject.transform.parent = gameObject.transform;
+        hookTransform.position = hookReturnPosition.position;
+        isHookThrown = false;
+        hook.onWater = false;
+        hook.onFloor = false;
+        AudioManager.instance.PlaySound("PullHook");
+        AudioManager.instance.StopSound("FishRod");
     }
 }

@@ -7,10 +7,14 @@ public class InputManager : MonoBehaviour
 {
     public static InputManager instance;
 
+    [Header("Ray Interactors")]
+    [SerializeField] private GameObject leftRayInteractor;
+    [SerializeField] private GameObject rightRayInteractor;
+
+    [Header("Input Actions")]
     [SerializeField] private InputActionProperty menuButton;
 
     public bool menuPressed { get; private set; }
-    public bool rightPrimaryPressed { get; private set; }
 
     void Awake()
     {
@@ -31,6 +35,8 @@ public class InputManager : MonoBehaviour
         if (menuPressed)
         {
             UIManager.instance.SetCollectionCanvasState(UIStateEnum.Toggle);
+            leftRayInteractor.SetActive(!leftRayInteractor.activeSelf);
+            rightRayInteractor.SetActive(!rightRayInteractor.activeSelf);
         }
     }
 

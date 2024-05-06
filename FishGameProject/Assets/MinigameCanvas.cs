@@ -79,4 +79,5 @@ public class MinigameCanvas : MonoBehaviour
         }
         targetSlider.value = targetValue;
     }
+
 }

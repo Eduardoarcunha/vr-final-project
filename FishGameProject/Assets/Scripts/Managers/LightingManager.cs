@@ -3,12 +3,13 @@ using UnityEngine;
 [ExecuteAlways]
 public class LightingManager : MonoBehaviour
 {
-    //Scene References
+    [Header("References")]
     [SerializeField] private Light DirectionalLight;
     [SerializeField] private LightingPreset Preset;
-    // Variables
+
+    [Header("Time of Day")]
     [SerializeField, Range(0, 24)] private float TimeOfDay;
-    [SerializeField, Range(0.1f, 10f)] private float TimeMultiplier = 1f; // Default speed is 1
+    [SerializeField, Range(0.1f, 10f)] private float TimeMultiplier = 1f;
 
     private void Update()
     {

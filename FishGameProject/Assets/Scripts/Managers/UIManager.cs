@@ -6,17 +6,23 @@ using UnityEngine.InputSystem;
 public class UIManager : MonoBehaviour
 {
     public static UIManager instance;
-
+    [Header("References")]
     [SerializeField] private Transform head;
-    [SerializeField] private float spawnDistance;
+
+    [Header("UI Canvases")]
     [SerializeField] private GameObject collectionCanvas;
     [SerializeField] private GameObject minigameCanvas;
     private CollectionCanvas collectionCanvasScript;
     private MinigameCanvas minigameCanvasScript;
 
-    public float positionLerpSpeed;
-    public float rotationLerpSpeed;
-    public float minigameOffset;
+    [Header("UI Display Settings")]
+    [SerializeField] private float spawnDistance;
+    [SerializeField] private float positionLerpSpeed;
+    [SerializeField] private float rotationLerpSpeed;
+    [SerializeField] private float minigameOffset;
+
+
+
 
     void Awake()
     {
