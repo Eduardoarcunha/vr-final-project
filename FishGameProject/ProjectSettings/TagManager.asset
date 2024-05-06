@@ -9,6 +9,10 @@ TagManager:
   - Right Hand
   - Energy
   - Obstacle
+  - Hook
+  - Fishing Rod
+  - Ground
+  - Water
   layers:
   - Default
   - TransparentFX
@@ -19,7 +23,7 @@ TagManager:
   - 
   - Boat
   - FishingRod
-  - 
+  - BloomEffect
   - 
   - Hands
   - XRUI

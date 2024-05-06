@@ -45989,6 +45989,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: InputManager
       objectReference: {fileID: 0}
+    - target: {fileID: 5321120776663729731, guid: e17d451a99f193e4aa102861f53e5dd9,
+        type: 3}
+      propertyPath: menuButton.m_Action.m_Name
+      value: Menu Button
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
