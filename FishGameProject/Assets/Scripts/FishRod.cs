@@ -26,7 +26,7 @@ public class FishRod : MonoBehaviour
     private Rigidbody hookRigidbody;
     private bool isHookThrown = false;
     private Vector3 previousHookPosition;
-    private Vector3 currentHookVelocity;
+    public Vector3 currentHookVelocity { get; private set; }
     private float throwForce;
 
     [Header("Other References")]
@@ -234,5 +234,18 @@ public class FishRod : MonoBehaviour
         hook.onFloor = false;
         AudioManager.instance.PlaySound("PullHook");
         AudioManager.instance.StopSound("FishRod");
+    }
+
+    public Vector3 GetVelocity()
+    {
+        return currentHookVelocity;
+    }
+
+    public Vector3 GetSlicePlane()
+    {
+        Vector3 velocity = currentHookVelocity;
+        Vector3 sliceDirection = (rodTipTransform.position - reelGameObject.transform.position).normalized;
+        Vector3 slicePlane = Vector3.Cross(velocity, sliceDirection);
+        return slicePlane;
     }
 }

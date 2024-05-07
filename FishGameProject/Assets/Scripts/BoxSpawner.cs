@@ -16,16 +16,19 @@ public class BoxGenerator : MonoBehaviour
     {
         for (int i = 0; i < numberOfBoxes; i++)
         {
-            // Instantiate the box
             GameObject newBox = Instantiate(boxPrefab, RandomPosition(), Quaternion.identity);
-            // Wait for the next spawn
+            SetRandomSliceDirection(newBox);
             yield return new WaitForSeconds(spawnInterval);
         }
     }
 
     private Vector3 RandomPosition()
     {
-        return new Vector3(Random.Range(-3, 3), 2, Random.Range(-3, 3));
+        return new Vector3(gameObject.transform.position.x, 2, Random.Range(-3, 3));
     }
 
+    private void SetRandomSliceDirection(GameObject box)
+    {
+        Sliceable sliceable = box.GetComponent<Sliceable>();
+    }
 }
