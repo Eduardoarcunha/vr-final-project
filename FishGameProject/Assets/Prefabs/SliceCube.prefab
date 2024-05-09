@@ -389,9 +389,10 @@ GameObject:
   - component: {fileID: 7852927269924802353}
   - component: {fileID: 179519362468673677}
   - component: {fileID: 246654781708041580}
+  - component: {fileID: 8918203824302464309}
   m_Layer: 0
   m_Name: SliceCube
-  m_TagString: Untagged
+  m_TagString: Slice Cube
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -490,6 +491,32 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &8918203824302464309
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4809424233853148332}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 771b6127155f8ad4faeb351f6843b1b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  crossSectionMaterial: {fileID: 2100000, guid: b1f0fa6f36af489449bf38bbc702bdfb,
+    type: 2}
+  requiredSliceDirection: {x: 0, y: 0, z: 0}
+  indicators:
+  - {fileID: 1685945634484956655}
+  - {fileID: 4541599652614887382}
+  - {fileID: 4208877562027366099}
+  - {fileID: 8966759368930122287}
+  faceTransforms:
+  - {fileID: 1301058011094624700}
+  - {fileID: 2673465338613861564}
+  - {fileID: 7176399275074456823}
+  - {fileID: 7288415989075518924}
+  cubeSpeed: 0.5
 --- !u!1 &5988051534227586156
 GameObject:
   m_ObjectHideFlags: 0

@@ -34,7 +34,7 @@ public class InputManager : MonoBehaviour
 
         if (menuPressed)
         {
-            UIManager.instance.SetCollectionCanvasState(UIStateEnum.Toggle);
+            UIManager.instance.SetCanvasState(CanvasEnum.Collection, UIStateEnum.Toggle);
             leftRayInteractor.SetActive(!leftRayInteractor.activeSelf);
             rightRayInteractor.SetActive(!rightRayInteractor.activeSelf);
         }
