@@ -21,8 +21,7 @@ public enum Habitat
 [CreateAssetMenu(fileName = "FishData", menuName = "ScriptableObjects/FishData", order = 1)]
 public class FishData : ScriptableObject
 {
-
-
+    public int fishID;
     public Texture2D UIIcon;
     public string fishName;
     public Rarity rarity;

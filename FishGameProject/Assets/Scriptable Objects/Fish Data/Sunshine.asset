@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1062c6b0b2087e5489f5d84943adf745, type: 3}
   m_Name: Sunshine
   m_EditorClassIdentifier: 
+  fishID: 7
   UIIcon: {fileID: 2800000, guid: 1bdc1c808726ee14085d079623da3178, type: 3}
   fishName: Sunshine
   rarity: 3

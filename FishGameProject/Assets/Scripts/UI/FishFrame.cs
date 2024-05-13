@@ -21,7 +21,10 @@ public class FishFrame : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     [Header("Scale and Alpha Settings")]
     public Vector3 normalScale;
     public Vector3 hoveredScale;
-    public float normalAlpha;
+
+    private float startAlpha;
+    public float uncollectedAlpha;
+    public float collectedAlpha;
     public float hoveredAlpha;
 
     private bool isHovering = false;
@@ -32,13 +35,21 @@ public class FishFrame : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     {
         fishImage.texture = fishData.UIIcon;
         fishName.text = fishData.fishName;
-        transform.localScale = normalScale; // Initialize scale
-        canvasGroup.alpha = normalAlpha; // Initialize alpha
+
+        transform.localScale = normalScale;
+        startAlpha = LevelManager.instance.playerCollection.HasFish(fishData.fishID) ? collectedAlpha : uncollectedAlpha;
+        canvasGroup.alpha = startAlpha;
+    }
+
+    void OnEnable()
+    {
+        transform.localScale = normalScale;
+        startAlpha = LevelManager.instance.playerCollection.HasFish(fishData.fishID) ? collectedAlpha : uncollectedAlpha;
+        canvasGroup.alpha = startAlpha;
     }
 
     void Update()
     {
-        // Smoothly transition the scale of the fish frame
         if (isHovering)
         {
             transform.localScale = Vector3.Lerp(transform.localScale, hoveredScale, Time.deltaTime * scaleSpeed);
@@ -47,7 +58,7 @@ public class FishFrame : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         else
         {
             transform.localScale = Vector3.Lerp(transform.localScale, normalScale, Time.deltaTime * scaleSpeed);
-            canvasGroup.alpha = Mathf.Lerp(canvasGroup.alpha, normalAlpha, Time.deltaTime * scaleSpeed);
+            canvasGroup.alpha = Mathf.Lerp(canvasGroup.alpha, startAlpha, Time.deltaTime * scaleSpeed);
         }
     }
 

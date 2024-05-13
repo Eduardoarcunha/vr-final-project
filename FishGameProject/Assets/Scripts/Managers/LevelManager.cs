@@ -11,7 +11,9 @@ public class LevelManager : MonoBehaviour
     private Coroutine miniGameCoroutine;
 
     [SerializeField] private FishRod fishRod;
+    [SerializeField] private Hook hook;
     public Transform head;
+    public PlayerCollection playerCollection;
 
     [Header("Slider Minigame Settings")]
     [SerializeField] private float sliderMinigameSpeedFactor;
@@ -147,7 +149,6 @@ public class LevelManager : MonoBehaviour
 
     public void EndMiniGame(bool win)
     {
-
         UIManager.instance.SetCanvasState(CanvasEnum.Minigame, UIStateEnum.Disable);
 
         if (miniGameCoroutine != null)
@@ -160,12 +161,14 @@ public class LevelManager : MonoBehaviour
 
         if (win)
         {
+            hook.LaunchFish();
             Debug.Log("Win");
         }
         else
         {
             Debug.Log("Lose");
         }
+
 
         fishRod.ReelInHook();
     }

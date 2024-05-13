@@ -347,13 +347,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3669ce13a37fa54797bc58bb2ad8b2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  collectionCanvas: {fileID: 0}
   fishData: {fileID: 0}
   fishImage: {fileID: 1561961347686792962}
   fishName: {fileID: 3820206684748604945}
   canvasGroup: {fileID: 6285825518668240089}
   normalScale: {x: 1, y: 1, z: 1}
   hoveredScale: {x: 1.1, y: 1.1, z: 1.1}
-  normalAlpha: 0.5
+  uncollectedAlpha: 0.1
+  collectedAlpha: 0.5
   hoveredAlpha: 1
 --- !u!225 &6285825518668240089
 CanvasGroup:

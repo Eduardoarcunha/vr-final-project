@@ -7,12 +7,16 @@ public class Hook : MonoBehaviour
     private Rigidbody rb;
     public bool onFloor = false;
     public bool onWater = false;
+    public GameObject fishPrefab;
+
+    [Header("Fish Launch Settings")]
+    [SerializeField] private float launchPower = 10f;
+    [SerializeField] private float heightFactor = 2f;
 
     public void Awake()
     {
         rb = GetComponent<Rigidbody>();
     }
-
 
     private void OnTriggerEnter(Collider other)
     {
@@ -39,5 +43,17 @@ public class Hook : MonoBehaviour
             currentPosition.y = 0;
             transform.position = currentPosition;
         }
+    }
+
+    public void LaunchFish()
+    {
+        GameObject fish = Instantiate(fishPrefab, transform.position, Quaternion.identity);
+        Rigidbody fishRigidbody = fish.GetComponent<Rigidbody>();
+
+        Vector3 targetDirection = LevelManager.instance.head.position - transform.position;
+        float distance = targetDirection.magnitude;
+        Vector3 targetWithHeight = targetDirection + Vector3.up * distance * heightFactor;
+
+        fishRigidbody.AddForce(targetWithHeight.normalized * launchPower, ForceMode.VelocityChange);
     }
 }

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1062c6b0b2087e5489f5d84943adf745, type: 3}
   m_Name: Olhudo
   m_EditorClassIdentifier: 
+  fishID: 5
   UIIcon: {fileID: 2800000, guid: 1a13b8ba435dc9d4ab0fa2001221f306, type: 3}
   fishName: Olhudo
   rarity: 1

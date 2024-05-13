@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1062c6b0b2087e5489f5d84943adf745, type: 3}
   m_Name: Celacanto
   m_EditorClassIdentifier: 
+  fishID: 3
   UIIcon: {fileID: 2800000, guid: 23ba1af5b7f2cb04698eb9b65fa89680, type: 3}
   fishName: Celacanto
   rarity: 2

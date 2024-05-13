@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1062c6b0b2087e5489f5d84943adf745, type: 3}
   m_Name: Blue
   m_EditorClassIdentifier: 
+  fishID: 2
   UIIcon: {fileID: 2800000, guid: b37e6f4186728c14c9e56141a16f6af8, type: 3}
   fishName: Blue
   rarity: 0

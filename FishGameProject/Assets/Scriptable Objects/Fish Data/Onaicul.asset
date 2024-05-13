@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1062c6b0b2087e5489f5d84943adf745, type: 3}
   m_Name: Onaicul
   m_EditorClassIdentifier: 
+  fishID: 6
   UIIcon: {fileID: 2800000, guid: 1a1c9d50ff12812429105c4e9c47f891, type: 3}
   fishName: Onaicul
   rarity: 1

@@ -46,6 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentMinigame: 2
   fishRod: {fileID: 0}
+  hook: {fileID: 0}
   head: {fileID: 0}
   sliderMinigameSpeedFactor: 10
   sliderMinigameCloseColor: {r: 0.37254903, g: 0.64705884, b: 0.64705884, a: 1}
@@ -53,6 +54,7 @@ MonoBehaviour:
   sliderTimerMax: 10
   cubePrefab: {fileID: 4809424233853148332, guid: b1eda6d6e31b4f24cbf07e2962224f32,
     type: 3}
-  cubeSpeed: 1.5
-  cubeToPlayerMinDistance: 1
-  cubeSpawnDistance: 20
+  totalCubes: 5
+  cubeSpeed: 3
+  cubeSpawnDistance: 10
+  cubeSpawnDelay: 1
