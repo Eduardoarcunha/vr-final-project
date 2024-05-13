@@ -14,8 +14,8 @@ public class UIManager : MonoBehaviour
     private Dictionary<CanvasEnum, GameObject> canvasMap;
     [SerializeField] private GameObject collectionCanvas;
     [SerializeField] private GameObject minigameCanvas;
-    public CollectionCanvas collectionCanvasScript;
-    public MinigameCanvas minigameCanvasScript;
+    [HideInInspector] public CollectionCanvas collectionCanvasScript;
+    [HideInInspector] public MinigameCanvas minigameCanvasScript;
 
     [Header("UI Canvas Settings")]
     [SerializeField] private UICanvasSettings collectionCanvasSettings;

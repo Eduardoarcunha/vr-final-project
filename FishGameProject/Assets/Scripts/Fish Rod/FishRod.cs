@@ -56,6 +56,24 @@ public class FishRod : MonoBehaviour
         lastKnobValue = reelKnob.value;
     }
 
+    public void OnSelectEnter(SelectEnterEventArgs args)
+    {
+        // Debug.Log(args.interactorObject.GetType());
+        // Debug.Log(args.interactorObject is XRDirectInteractor);
+
+        if (args.interactorObject is XRDirectInteractor)
+        {
+            grabInteractable.trackRotation = true;
+        }
+        else if (args.interactorObject is XRSocketTagInteractor)
+        {
+            grabInteractable.trackRotation = false;
+        }
+    }
+
+
+
+
     void Update()
     {
         UpdateLinePositions();
