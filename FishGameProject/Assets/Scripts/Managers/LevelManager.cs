@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,10 +7,13 @@ public class LevelManager : MonoBehaviour
 {
     public static LevelManager instance;
 
-    [HideInInspector] public MinigameEnum currentMinigame = MinigameEnum.None;
+    public MinigameEnum currentMinigame = MinigameEnum.None;
     private Coroutine miniGameCoroutine;
 
     [SerializeField] private FishRod fishRod;
+    [SerializeField] private Hook hook;
+    public Transform head;
+    public PlayerCollection playerCollection;
 
     [Header("Slider Minigame Settings")]
     [SerializeField] private float sliderMinigameSpeedFactor;
@@ -20,7 +24,16 @@ public class LevelManager : MonoBehaviour
     private float timeWithingCloseRange = 0;
     private float minWithingCloseRangePercentage = 0.1f;
 
-
+    [Header("BeatFish Minigame Settings")]
+    [SerializeField] private GameObject cubePrefab;
+    [SerializeField] private int totalCubes;
+    [SerializeField] private float cubeSpeed;
+    [SerializeField] private float cubeSpawnDistance;
+    [SerializeField] private float cubeSpawnDelay;
+    private int spawnedCubes = 0;
+    private int remainingCubes;
+    private int correctSlices;
+    private float correctSlicePercentage = 0.8f;
 
     private void Awake()
     {
@@ -39,42 +52,104 @@ public class LevelManager : MonoBehaviour
     void Start()
     {
         AudioManager.instance.PlaySound("OceanSound");
+        ResetMiniGameSettings();
+    }
+
+    void ResetMiniGameSettings()
+    {
         sliderTimer = sliderTimerMax;
+
+        spawnedCubes = 0;
+        remainingCubes = totalCubes;
+        correctSlices = 0;
+        UIManager.instance.minigameCanvasScript.SetBeatFishScore(correctSlices);
     }
 
     void Update()
     {
         if (currentMinigame == MinigameEnum.Slider)
         {
-            if (sliderTimer <= 0 || timeWithingCloseRange > sliderTimerMax * minWithingCloseRangePercentage)
-            {
-                EndMiniGame();
-            }
+            CheckSlidersDistance();
+
             if (miniGameCoroutine == null)
             {
                 miniGameCoroutine = StartCoroutine(ChangeFishSliderValueOverTime());
             }
 
-            CheckSlidersDistance();
+            if (timeWithingCloseRange > sliderTimerMax * minWithingCloseRangePercentage)
+            {
+                EndMiniGame(true);
+            }
+
+            if (sliderTimer <= 0)
+            {
+                EndMiniGame(false);
+            }
 
             sliderTimer -= Time.deltaTime;
+        }
+        else if (currentMinigame == MinigameEnum.BeatFish)
+        {
+            if (miniGameCoroutine == null && spawnedCubes < totalCubes)
+            {
+                miniGameCoroutine = StartCoroutine(SpawnCubesWithDelay());
+            }
+
+            if (remainingCubes == 0)
+            {
+                Debug.Log("Correct Slices: " + correctSlices);
+                Debug.Log("Total Cubes: " + totalCubes);
+                EndMiniGame(correctSlices / totalCubes >= correctSlicePercentage);
+            }
         }
     }
 
     public void StartMiniGame()
     {
-        currentMinigame = (MinigameEnum)Random.Range(0, 0); // None cant be selected
+        ResetMiniGameSettings();
+        currentMinigame = (MinigameEnum)UnityEngine.Random.Range(0, 2);
 
-        UIManager.instance.SetMinigameCanvasState(UIStateEnum.Enable);
+        UIManager.instance.SetCanvasState(CanvasEnum.Minigame, UIStateEnum.Enable);
+        if (currentMinigame == MinigameEnum.Slider)
+        {
+            StartSliderMinigame();
+        }
+        else if (currentMinigame == MinigameEnum.BeatFish)
+        {
+            StartBeatFishMinigame();
+        }
+    }
+
+    public void StartSliderMinigame()
+    {
         miniGameCoroutine = StartCoroutine(ChangeFishSliderValueOverTime());
         sliderTimer = sliderTimerMax;
         timeWithingCloseRange = 0;
     }
 
-    public void EndMiniGame()
+    public void StartBeatFishMinigame()
     {
-        currentMinigame = MinigameEnum.None;
-        UIManager.instance.SetMinigameCanvasState(UIStateEnum.Disable);
+        miniGameCoroutine = StartCoroutine(SpawnCubesWithDelay());
+    }
+
+    IEnumerator SpawnCubesWithDelay()
+    {
+        spawnedCubes++;
+        float lateralOffset = 1.0f;
+
+        bool spawnRight = UnityEngine.Random.Range(0, 2) == 0;
+        Vector3 spawnPosition = head.position + (spawnRight ? 1 : -1) * head.right * lateralOffset + head.forward * cubeSpawnDistance;
+        spawnPosition.y = 1.4f;
+        GameObject cube = Instantiate(cubePrefab, spawnPosition, Quaternion.identity);
+        cube.GetComponent<BeatCube>().cubeSpeed = cubeSpeed;
+
+        yield return new WaitForSeconds(cubeSpawnDelay);
+        miniGameCoroutine = null;
+    }
+
+    public void EndMiniGame(bool win)
+    {
+        UIManager.instance.SetCanvasState(CanvasEnum.Minigame, UIStateEnum.Disable);
 
         if (miniGameCoroutine != null)
         {
@@ -82,22 +157,26 @@ public class LevelManager : MonoBehaviour
             miniGameCoroutine = null;
         }
 
-        if (timeWithingCloseRange / sliderTimerMax > minWithingCloseRangePercentage)
+        currentMinigame = MinigameEnum.None;
+
+        if (win)
         {
-            Debug.Log("You Win!");
+            hook.LaunchFish();
+            Debug.Log("Win");
         }
         else
         {
-            Debug.Log("You Lose!");
+            Debug.Log("Lose");
         }
+
 
         fishRod.ReelInHook();
     }
 
     private IEnumerator ChangeFishSliderValueOverTime()
     {
-        float targetValue = Random.Range(0f, 1f);
-        float initialValue = UIManager.instance.GetSliderValue(SliderEnum.Fish);
+        float targetValue = UnityEngine.Random.Range(0f, 1f);
+        float initialValue = UIManager.instance.minigameCanvasScript.GetSliderValue(SliderEnum.Fish);
         float distance = Mathf.Abs(targetValue - initialValue);
 
         float dynamicDuration = distance * sliderMinigameSpeedFactor;
@@ -108,32 +187,41 @@ public class LevelManager : MonoBehaviour
         {
             elapsedTime += Time.deltaTime;
             float newValue = Mathf.Lerp(initialValue, targetValue, elapsedTime / dynamicDuration);
-            UIManager.instance.SetSliderValue(newValue, SliderEnum.Fish);
+            UIManager.instance.minigameCanvasScript.SetSliderValue(newValue, SliderEnum.Fish);
             yield return null;
         }
-        UIManager.instance.SetSliderValue(targetValue, SliderEnum.Fish);
+        UIManager.instance.minigameCanvasScript.SetSliderValue(targetValue, SliderEnum.Fish);
         miniGameCoroutine = null;
     }
 
     public void AddSliderValue(float value, SliderEnum sliderEnum)
     {
-        UIManager.instance.AddSliderValue(value, sliderEnum);
+        UIManager.instance.minigameCanvasScript.AddSliderValue(value, sliderEnum);
     }
 
     public void CheckSlidersDistance()
     {
-        float playerValue = UIManager.instance.GetSliderValue(SliderEnum.Player);
-        float fishValue = UIManager.instance.GetSliderValue(SliderEnum.Fish);
+        float playerValue = UIManager.instance.minigameCanvasScript.GetSliderValue(SliderEnum.Player);
+        float fishValue = UIManager.instance.minigameCanvasScript.GetSliderValue(SliderEnum.Fish);
 
         if (Mathf.Abs(playerValue - fishValue) < 0.1f)
         {
-            UIManager.instance.ColorFishBackground(sliderMinigameCloseColor);
+            UIManager.instance.minigameCanvasScript.ColorFishBackground(sliderMinigameCloseColor);
             timeWithingCloseRange += Time.deltaTime;
         }
         else
         {
-            UIManager.instance.ColorFishBackground(sliderMinigameFarColor);
+            UIManager.instance.minigameCanvasScript.ColorFishBackground(sliderMinigameFarColor);
         }
     }
 
+    public void CubeSliced(bool correctDirection)
+    {
+        remainingCubes--;
+        if (correctDirection)
+        {
+            correctSlices++;
+            UIManager.instance.minigameCanvasScript.SetBeatFishScore(correctSlices);
+        }
+    }
 }

@@ -2,16 +2,48 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class MinigameCanvas : MonoBehaviour
 {
+    [Header("MiniGame References")]
+    [SerializeField] private GameObject sliderPanel;
+    [SerializeField] private GameObject beatFishPanel;
+
+    [Header("Slider MiniGame")]
     [SerializeField] private Slider playerSlider;
     [SerializeField] private Slider fishSlider;
     [SerializeField] private Image fishBackground;
     [SerializeField] private float sliderSmoothDuration;
 
+    [Header("Beat Fish MiniGame")]
+    [SerializeField] private TextMeshProUGUI fishScoreText;
+
     private Coroutine playerSliderCoroutine;
     private Coroutine fishSliderCoroutine;
+
+    private void OnEnable()
+    {
+        if (LevelManager.instance.currentMinigame == MinigameEnum.Slider)
+        {
+            sliderPanel.SetActive(true);
+            beatFishPanel.SetActive(false);
+        }
+        else if (LevelManager.instance.currentMinigame == MinigameEnum.BeatFish)
+        {
+            sliderPanel.SetActive(false);
+            beatFishPanel.SetActive(true);
+        }
+        else
+        {
+            sliderPanel.SetActive(false);
+            beatFishPanel.SetActive(false);
+        }
+    }
+
+    /// -------------------------
+    /// Slider Minigame Methods
+    /// -------------------------
 
     public void ColorFishBackground(Color color)
     {
@@ -80,4 +112,13 @@ public class MinigameCanvas : MonoBehaviour
         targetSlider.value = targetValue;
     }
 
+    /// -------------------------
+    /// Beat Fish Minigame Methods
+    /// -------------------------
+
+
+    public void SetBeatFishScore(int score)
+    {
+        fishScoreText.text = score.ToString();
+    }
 }

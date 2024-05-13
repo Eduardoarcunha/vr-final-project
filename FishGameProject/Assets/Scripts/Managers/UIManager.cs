@@ -6,22 +6,28 @@ using UnityEngine.InputSystem;
 public class UIManager : MonoBehaviour
 {
     public static UIManager instance;
+
     [Header("References")]
     [SerializeField] private Transform head;
 
     [Header("UI Canvases")]
+    private Dictionary<CanvasEnum, GameObject> canvasMap;
     [SerializeField] private GameObject collectionCanvas;
     [SerializeField] private GameObject minigameCanvas;
-    private CollectionCanvas collectionCanvasScript;
-    private MinigameCanvas minigameCanvasScript;
+    public CollectionCanvas collectionCanvasScript;
+    public MinigameCanvas minigameCanvasScript;
 
-    [Header("UI Display Settings")]
-    [SerializeField] private float spawnDistance;
-    [SerializeField] private float positionLerpSpeed;
-    [SerializeField] private float rotationLerpSpeed;
-    [SerializeField] private float minigameOffset;
+    [Header("UI Canvas Settings")]
+    [SerializeField] private UICanvasSettings collectionCanvasSettings;
+    [SerializeField] private UICanvasSettings sliderMinigameCanvasSettings;
+    [SerializeField] private UICanvasSettings beatFishMinigameCanvasSettings;
+    private Vector3 desiredPosition;
+    private Vector3 directionToFace;
+    private Quaternion desiredRotation;
 
+    private float initialCanvasY;
 
+    private Dictionary<GameObject, float> initialYPositions = new Dictionary<GameObject, float>();
 
 
     void Awake()
@@ -35,115 +41,108 @@ public class UIManager : MonoBehaviour
             Destroy(gameObject);
         }
 
+        canvasMap = new Dictionary<CanvasEnum, GameObject>()
+        {
+            { CanvasEnum.Collection, collectionCanvas },
+            { CanvasEnum.Minigame, minigameCanvas }
+        };
+
         collectionCanvasScript = collectionCanvas.GetComponent<CollectionCanvas>();
         minigameCanvasScript = minigameCanvas.GetComponent<MinigameCanvas>();
+
+        initialYPositions[collectionCanvas] = collectionCanvas.transform.position.y;
+        initialYPositions[minigameCanvas] = minigameCanvas.transform.position.y;
     }
 
-    public void SetCollectionCanvasState(UIStateEnum state)
+    public void SetCanvasState(CanvasEnum canvasEnum, UIStateEnum state)
     {
+        if (!canvasMap.TryGetValue(canvasEnum, out GameObject canvas))
+        {
+            Debug.LogError("Invalid CanvasEnum");
+            return;
+        }
+
         switch (state)
         {
             case UIStateEnum.Enable:
-                collectionCanvas.SetActive(true);
+                MoveCanvasToInitialPosition(canvas, GetSettingsForCanvas(canvas));
+                canvas.SetActive(true);
+                initialYPositions[canvas] = canvas.transform.position.y;  // Set after moving to initial position
                 break;
             case UIStateEnum.Disable:
-                collectionCanvas.SetActive(false);
+                canvas.SetActive(false);
                 break;
             case UIStateEnum.Toggle:
-                collectionCanvas.SetActive(!collectionCanvas.activeSelf);
+                if (!canvas.activeSelf)
+                {
+                    MoveCanvasToInitialPosition(canvas, GetSettingsForCanvas(canvas));
+                }
+                canvas.SetActive(!canvas.activeSelf);
+                break;
+            default:
+                Debug.LogError("Invalid UIStateEnum");
                 break;
         }
-    }
 
-    public void SetMinigameCanvasState(UIStateEnum state)
-    {
-        switch (state)
-        {
-            case UIStateEnum.Enable:
-                minigameCanvas.SetActive(true);
-                break;
-            case UIStateEnum.Disable:
-                minigameCanvasScript.StopAllCoroutines();
-                minigameCanvas.SetActive(false);
-                break;
-            case UIStateEnum.Toggle:
-                minigameCanvas.SetActive(!minigameCanvas.activeSelf);
-                break;
-        }
-    }
-
-    public void SetSliderValue(float value, SliderEnum sliderEnum)
-    {
-        if (sliderEnum == SliderEnum.Player || sliderEnum == SliderEnum.Fish)
-        {
-            minigameCanvasScript.SetSliderValue(value, sliderEnum);
-        }
-        else
-        {
-            Debug.LogError("Invalid SliderEnum");
-        }
-
-    }
-
-    public void AddSliderValue(float value, SliderEnum slideEnum)
-    {
-        if (slideEnum == SliderEnum.Player || slideEnum == SliderEnum.Fish)
-        {
-            minigameCanvasScript.AddSliderValue(value, slideEnum);
-        }
-        else
-        {
-            Debug.LogError("Invalid SliderEnum");
-        }
-    }
-
-    public float GetSliderValue(SliderEnum sliderEnum)
-    {
-        if (sliderEnum == SliderEnum.Player || sliderEnum == SliderEnum.Fish)
-        {
-            return minigameCanvasScript.GetSliderValue(sliderEnum);
-        }
-        else
-        {
-            Debug.LogError("Invalid SliderEnum");
-            return -1;
-        }
-    }
-
-    public void ColorFishBackground(Color color)
-    {
-        minigameCanvasScript.ColorFishBackground(color);
+        initialCanvasY = canvas.transform.position.y;
     }
 
     void Update()
     {
-        if (collectionCanvas.activeSelf)
+        MoveCanvas(collectionCanvas, collectionCanvasSettings);
+        MoveCanvas(minigameCanvas, GetCurrentMinigameSettings());
+    }
+
+    private void MoveCanvasToInitialPosition(GameObject canvas, UICanvasSettings settings)
+    {
+        Vector3 startPosition = head.position + head.forward * settings.spawnDistance + head.right * settings.rightOffset;
+        canvas.transform.position = startPosition;
+        Vector3 directionToFace = (head.position - canvas.transform.position).normalized;
+        Quaternion startRotation = Quaternion.LookRotation(directionToFace) * Quaternion.Euler(0, 180, 0);
+        canvas.transform.rotation = startRotation;
+    }
+
+    private UICanvasSettings GetSettingsForCanvas(GameObject canvas)
+    {
+        if (canvas == collectionCanvas)
+            return collectionCanvasSettings;
+        else if (canvas == minigameCanvas)
+            return GetCurrentMinigameSettings();
+
+        return null;
+    }
+
+    private UICanvasSettings GetCurrentMinigameSettings()
+    {
+        switch (LevelManager.instance.currentMinigame)
         {
-            // Calculate desired position
-            Vector3 desiredPosition = head.position + (head.forward * spawnDistance);
+            case MinigameEnum.Slider:
+                return sliderMinigameCanvasSettings;
+            case MinigameEnum.BeatFish:
+                return beatFishMinigameCanvasSettings;
+            default:
+                return null;
+        }
+    }
 
-            // Calculate desired rotation to face towards the player
-            Vector3 directionToFace = (head.position - collectionCanvas.transform.position).normalized;
-            Quaternion desiredRotation = Quaternion.LookRotation(directionToFace) * Quaternion.Euler(0, 180, 0); // Adjusting the rotation to face the player
+    private void MoveCanvas(GameObject canvas, UICanvasSettings settings)
+    {
+        if (!canvas.activeSelf) return;
 
-            // Interpolate position and rotation to create a delay effect
-            collectionCanvas.transform.position = Vector3.Lerp(collectionCanvas.transform.position, desiredPosition, positionLerpSpeed * Time.deltaTime);
-            collectionCanvas.transform.rotation = Quaternion.Slerp(collectionCanvas.transform.rotation, desiredRotation, rotationLerpSpeed * Time.deltaTime);
+        desiredPosition = head.position + head.forward * settings.spawnDistance + head.right * settings.rightOffset;
+        if (settings.limitYRange)
+        {
+            desiredPosition.y = Mathf.Clamp(desiredPosition.y, initialYPositions[canvas] - settings.minY, initialYPositions[canvas] + settings.maxY);
         }
 
 
-        if (minigameCanvas.activeSelf)
+        directionToFace = (head.position - canvas.transform.position).normalized;
+        desiredRotation = Quaternion.LookRotation(directionToFace) * Quaternion.Euler(0, 180, 0);
+
+        if (Vector3.Distance(canvas.transform.position, desiredPosition) > settings.positionTolerance)
         {
-            // Calculate desired position for minigameCanvas
-            Vector3 desiredPosition = head.position + (head.forward * spawnDistance) + (head.right * minigameOffset);
-
-            // Calculate desired rotation to face towards the player
-            Vector3 directionToFace = (head.position - minigameCanvas.transform.position).normalized;
-            Quaternion desiredRotation = Quaternion.LookRotation(directionToFace) * Quaternion.Euler(0, 180, 0);
-
-            // Interpolate position and rotation to create a delay effect
-            minigameCanvas.transform.position = Vector3.Lerp(minigameCanvas.transform.position, desiredPosition, positionLerpSpeed * Time.deltaTime);
-            minigameCanvas.transform.rotation = Quaternion.Slerp(minigameCanvas.transform.rotation, desiredRotation, rotationLerpSpeed * Time.deltaTime);
+            canvas.transform.position = Vector3.Lerp(canvas.transform.position, desiredPosition, settings.positionLerpSpeed * Time.deltaTime);
+            canvas.transform.rotation = Quaternion.Slerp(canvas.transform.rotation, desiredRotation, settings.rotationLerpSpeed * Time.deltaTime);
         }
     }
 }

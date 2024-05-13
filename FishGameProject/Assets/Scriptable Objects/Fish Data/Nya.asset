@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1062c6b0b2087e5489f5d84943adf745, type: 3}
+  m_Name: Nya
+  m_EditorClassIdentifier: 
+  fishID: 4
+  UIIcon: {fileID: 2800000, guid: e53804b6dfcd1ad428098a3f0dbce110, type: 3}
+  fishName: Nya
+  rarity: 2
+  habitat: 2

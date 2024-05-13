@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 4511378047075943149}
   - component: {fileID: 2103608620733513412}
   - component: {fileID: 294080231208613169}
+  - component: {fileID: 3924175493828059809}
   m_Layer: 0
   m_Name: Fishing Rod
   m_TagString: Fishing Rod
@@ -70,7 +71,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 284830dd46ce77c4696ef63853c7cf5e, type: 2}
+  - {fileID: -876546973899608171, guid: f3af3c356e2ae6346893512397408e38, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -286,16 +287,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7b905885c19d2940937357600ab871a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  totalLinePoints: 20
   lineRenderer: {fileID: 4805850301149560365}
+  totalLinePoints: 20
+  currentFishRodVelocity: {x: 0, y: 0, z: 0}
   reelGameObject: {fileID: 4310606437630046595}
   reelKnobTreshold: 0.01
   hookGameObject: {fileID: 2954894983443229366}
   hookReturnPosition: {fileID: 808175583535436010}
-  hookSpeed: 5
   rodTipTransform: {fileID: 7009684440695785644}
   rodMidTransform: {fileID: 391855821004771760}
-  controllerCharacteristics: 576
+--- !u!114 &3924175493828059809
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1376677855059759241}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0f06627ee412254c89ab543cb7c2e6c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fishRod: {fileID: 294080231208613169}
+  sliceMaterial: {fileID: 2100000, guid: b1f0fa6f36af489449bf38bbc702bdfb, type: 2}
 --- !u!1 &2813497521085802176
 GameObject:
   m_ObjectHideFlags: 0
@@ -308,7 +322,7 @@ GameObject:
   - component: {fileID: 1835015097673861514}
   m_Layer: 0
   m_Name: Lower Rod Collider
-  m_TagString: Untagged
+  m_TagString: Fishing Rod
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -380,6 +394,7 @@ Transform:
   m_Children:
   - {fileID: 7009684440695785644}
   - {fileID: 391855821004771760}
+  - {fileID: 7682081697352639554}
   m_Father: {fileID: 6714197552994899954}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2954894983443229366
@@ -530,6 +545,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   onFloor: 0
   onWater: 0
+  fishPrefab: {fileID: 342786271704006503, guid: eb104902ba0e92345994c168f17d4646,
+    type: 3}
+  launchPower: 10
+  heightFactor: 2
 --- !u!1 &3024454714302519643
 GameObject:
   m_ObjectHideFlags: 0
@@ -898,6 +917,37 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
+--- !u!1 &4558109208963348822
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7682081697352639554}
+  m_Layer: 0
+  m_Name: Rod Bottom Transform
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7682081697352639554
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4558109208963348822}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.002, y: 0, z: -1.003}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 897657001390542501}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4894256044092186263
 GameObject:
   m_ObjectHideFlags: 0
@@ -940,7 +990,7 @@ GameObject:
   - component: {fileID: 1671217534350346211}
   m_Layer: 0
   m_Name: Rod Colliders
-  m_TagString: Untagged
+  m_TagString: Fishing Rod
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -975,7 +1025,7 @@ GameObject:
   - component: {fileID: 7283032471179205553}
   m_Layer: 0
   m_Name: Upper Rod Collider
-  m_TagString: Untagged
+  m_TagString: Fishing Rod
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1014,7 +1064,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.73559076, y: 0.30245015, z: 1.0685104}
+  m_Size: {x: 0.73559076, y: 0.30245015, z: 1.24}
   m_Center: {x: -0.13220474, y: -0.027501553, z: 0.034254752}
 --- !u!1 &6602950082521831601
 GameObject:
@@ -1028,7 +1078,7 @@ GameObject:
   - component: {fileID: 67526452765354575}
   m_Layer: 0
   m_Name: Grip Rod Collider
-  m_TagString: Untagged
+  m_TagString: Fishing Rod
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1094,7 +1144,7 @@ Transform:
   m_GameObject: {fileID: 7373886138184996990}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.088, y: 0, z: 0.444}
+  m_LocalPosition: {x: 0.064, y: 0, z: 0.444}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

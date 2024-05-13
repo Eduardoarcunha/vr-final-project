@@ -18,11 +18,10 @@ public enum Habitat
     CoralReef,
 }
 
-[CreateAssetMenu(fileName = "Fish", menuName = "Scriptables/Fish", order = 1)]
+[CreateAssetMenu(fileName = "FishData", menuName = "ScriptableObjects/FishData", order = 1)]
 public class FishData : ScriptableObject
 {
-
-
+    public int fishID;
     public Texture2D UIIcon;
     public string fishName;
     public Rarity rarity;

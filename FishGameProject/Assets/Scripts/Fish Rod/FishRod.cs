@@ -4,12 +4,16 @@ using UnityEngine;
 using UnityEngine.XR;
 using UnityEngine.XR.Content.Interaction;
 using UnityEngine.XR.Interaction.Toolkit;
+using EzySlice;
 
 public class FishRod : MonoBehaviour
 {
     [Header("Fish Line")]
     [SerializeField] private LineRenderer lineRenderer;
     [SerializeField] private int totalLinePoints;
+    private Vector3 previousFishRodPosition;
+    public Vector3 currentFishRodVelocity;
+
 
     [Header("Reel Knob")]
     [SerializeField] private GameObject reelGameObject;
@@ -26,11 +30,11 @@ public class FishRod : MonoBehaviour
     private Rigidbody hookRigidbody;
     private bool isHookThrown = false;
     private Vector3 previousHookPosition;
-    private Vector3 currentHookVelocity;
+    public Vector3 currentHookVelocity { get; private set; }
     private float throwForce;
 
     [Header("Other References")]
-    [SerializeField] private Transform rodTipTransform;
+    [SerializeField] public Transform rodTipTransform;
     [SerializeField] private Transform rodMidTransform;
     private XRGrabInteractable grabInteractable;
 
@@ -54,7 +58,6 @@ public class FishRod : MonoBehaviour
 
     void Update()
     {
-
         UpdateLinePositions();
 
         if (Mathf.Abs(reelKnob.value - lastKnobValue) > reelKnobTreshold)
@@ -65,6 +68,9 @@ public class FishRod : MonoBehaviour
 
         CalculateThrowForce();
         if (isHookThrown) CheckReelInHook();
+
+        currentFishRodVelocity = (rodTipTransform.position - previousFishRodPosition) / Time.deltaTime;
+        previousFishRodPosition = rodTipTransform.position;
     }
 
 
@@ -234,5 +240,14 @@ public class FishRod : MonoBehaviour
         hook.onFloor = false;
         AudioManager.instance.PlaySound("PullHook");
         AudioManager.instance.StopSound("FishRod");
+    }
+
+
+    public Vector3 GetSlicePlane()
+    {
+        Vector3 rodDirection = (rodTipTransform.position - rodMidTransform.transform.position).normalized;
+        Vector3 slicePlane = Vector3.Cross(currentFishRodVelocity, rodDirection);
+        slicePlane.Normalize();
+        return slicePlane;
     }
 }

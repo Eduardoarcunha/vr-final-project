@@ -9,10 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1062c6b0b2087e5489f5d84943adf745, type: 3}
-  m_Name: Celacanto
+  m_Script: {fileID: 11500000, guid: 17d8991d27c5fbd4697c75ab5de79fad, type: 3}
+  m_Name: CollectionCanvasSettings
   m_EditorClassIdentifier: 
-  UIIcon: {fileID: 2800000, guid: 23ba1af5b7f2cb04698eb9b65fa89680, type: 3}
-  fishName: Celacanto
-  rarity: 2
-  habitat: 0
+  positionTolerance: 0
+  spawnDistance: 3
+  positionLerpSpeed: 3
+  rotationLerpSpeed: 1
+  rightOffset: 0
