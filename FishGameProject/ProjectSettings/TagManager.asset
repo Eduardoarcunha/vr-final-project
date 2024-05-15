@@ -14,6 +14,7 @@ TagManager:
   - Ground
   - Water
   - Slice Cube
+  - Fish Spot
   layers:
   - Default
   - TransparentFX

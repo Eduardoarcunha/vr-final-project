@@ -20,15 +20,20 @@ public class Hook : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Water") && !onWater && !onFloor)
+        if (other.CompareTag("Fish Spot") && !onWater && !onFloor)
+        {
+            Debug.Log("Fish Spot");
+            onWater = true;
+            FreezeHook();
+            // FishSpot fishSpot = other.GetComponent<FishSpot>();
+            // fishSpot.CatchFish();
+        }
+        else if (other.CompareTag("Water") && !onWater && !onFloor)
         {
             onWater = true;
-            rb.isKinematic = true;
-            Vector3 currentPosition = transform.position;
-            transform.parent = null;
-            currentPosition.y = 0;
-            transform.position = currentPosition;
-            LevelManager.instance.StartMiniGame();
+            FreezeHook();
+            FishData fish = LevelManager.instance.fishCollection.GetRandomFish();
+            LevelManager.instance.StartMiniGame(fish);
         }
     }
 
@@ -37,12 +42,17 @@ public class Hook : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground"))
         {
             onFloor = true;
-            rb.isKinematic = true;
-            Vector3 currentPosition = transform.position;
-            transform.parent = null;
-            currentPosition.y = 0;
-            transform.position = currentPosition;
+            FreezeHook();
         }
+    }
+
+    private void FreezeHook()
+    {
+        rb.isKinematic = true;
+        Vector3 currentPosition = transform.position;
+        transform.parent = null;
+        currentPosition.y = 0;
+        transform.position = currentPosition;
     }
 
     public void LaunchFish()
