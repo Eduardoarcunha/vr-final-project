@@ -15,12 +15,12 @@ RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 9
   m_Fog: 0
-  m_FogColor: {r: 0.7237539, g: 0.7579986, b: 0.9243955, a: 1}
+  m_FogColor: {r: 0.7507958, g: 0.7603128, b: 0.88777655, a: 1}
   m_FogMode: 3
   m_FogDensity: 0.01
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 1, g: 0.99972326, b: 0.9385736, a: 1}
+  m_AmbientSkyColor: {r: 1, g: 0.9995447, b: 0.89892775, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 1
@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.1736308, g: 0.21707182, b: 0.29918617, a: 1}
+  m_IndirectSpecularColor: {r: 0.18208161, g: 0.2244194, b: 0.28791493, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -14275,7 +14275,7 @@ Light:
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
-  m_Color: {r: 0.9341524, g: 0.9341524, b: 0.9341524, a: 1}
+  m_Color: {r: 0.89165306, g: 0.89165306, b: 0.89165306, a: 1}
   m_Intensity: 2
   m_Range: 10
   m_SpotAngle: 30
@@ -14334,7 +14334,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 410087039}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.054937538, y: 0.7733674, z: -0.6279385, w: 0.06766093}
+  m_LocalRotation: {x: 0.08589693, y: 0.16870515, z: -0.98180574, w: 0.014759798}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -70049,6 +70049,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: LightingManager
       objectReference: {fileID: 0}
+    - target: {fileID: 7045898152354707052, guid: 408a8093a018fd547ad58d53bd6731ae,
+        type: 3}
+      propertyPath: TimeOfDay
+      value: 10.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 7045898152354707052, guid: 408a8093a018fd547ad58d53bd6731ae,
+        type: 3}
+      propertyPath: TimeMultiplier
+      value: 2.38
+      objectReference: {fileID: 0}
+    - target: {fileID: 7045898152354707052, guid: 408a8093a018fd547ad58d53bd6731ae,
+        type: 3}
+      propertyPath: DirectionalLight
+      value: 
+      objectReference: {fileID: 410087040}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
