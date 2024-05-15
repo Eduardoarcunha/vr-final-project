@@ -45,9 +45,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   head: {fileID: 0}
-  spawnDistance: 3
   collectionCanvas: {fileID: 0}
   minigameCanvas: {fileID: 0}
-  positionLerpSpeed: 5
-  rotationLerpSpeed: 5
-  minigameOffset: 1.1
+  collectionCanvasScript: {fileID: 0}
+  minigameCanvasScript: {fileID: 0}
+  collectionCanvasSettings: {fileID: 11400000, guid: 689d16892f663cf47b0d3f313f35e162,
+    type: 2}
+  sliderMinigameCanvasSettings: {fileID: 11400000, guid: a2a8bce39c4dcf646b466288a24061a3,
+    type: 2}
+  beatFishMinigameCanvasSettings: {fileID: 11400000, guid: 8298e595f017bd942b98f22c3ee84218,
+    type: 2}

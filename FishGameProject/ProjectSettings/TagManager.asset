@@ -14,6 +14,7 @@ TagManager:
   - Ground
   - Water
   - Slice Cube
+  - Fish Spot
   layers:
   - Default
   - TransparentFX
@@ -23,7 +24,7 @@ TagManager:
   - UI
   - Fish
   - Boat
-  - FishingRod
+  - Fish Rod
   - BloomEffect
   - 
   - Hands

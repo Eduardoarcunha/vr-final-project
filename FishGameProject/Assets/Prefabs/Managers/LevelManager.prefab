@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 137257784894946650}
   - component: {fileID: 4968194159492062278}
+  - component: {fileID: 1004311204413545801}
   m_Layer: 0
   m_Name: LevelManager
   m_TagString: Untagged
@@ -48,6 +49,8 @@ MonoBehaviour:
   fishRod: {fileID: 0}
   hook: {fileID: 0}
   head: {fileID: 0}
+  playerCollection: {fileID: 0}
+  fishCollection: {fileID: 0}
   sliderMinigameSpeedFactor: 10
   sliderMinigameCloseColor: {r: 0.37254903, g: 0.64705884, b: 0.64705884, a: 1}
   sliderMinigameFarColor: {r: 1, g: 0.5294118, b: 0.28627452, a: 1}
@@ -58,3 +61,25 @@ MonoBehaviour:
   cubeSpeed: 3
   cubeSpawnDistance: 10
   cubeSpawnDelay: 1
+--- !u!114 &1004311204413545801
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4908047902483540665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbbd15b0f5962c64bb1b129c23ee6c74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fishDataList:
+  - {fileID: 11400000, guid: c04b62ebaa8167d498b41e462954036a, type: 2}
+  - {fileID: 11400000, guid: 2139de2a84b4d8b458a5a4960dacbfcd, type: 2}
+  - {fileID: 11400000, guid: e51a4b52cbe2c2c479e008b4051c3e40, type: 2}
+  - {fileID: 11400000, guid: a140e5b5ff52fab488f8632b42074918, type: 2}
+  - {fileID: 11400000, guid: cd7bab444327d7a4790f8ecdc3b76e09, type: 2}
+  - {fileID: 11400000, guid: 4eddafa3b1937f846b74b5107a7949f1, type: 2}
+  - {fileID: 11400000, guid: 755751a0901fac948b0bfa0bf408dd17, type: 2}
+  - {fileID: 11400000, guid: 8a2814be0780dd248ac8fbe76f35f40a, type: 2}
+  - {fileID: 11400000, guid: 9e6d99b4e3c2ef746898a815590bf71b, type: 2}

@@ -14,6 +14,9 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private Hook hook;
     public Transform head;
     public PlayerCollection playerCollection;
+    public FishCollection fishCollection;
+
+    private FishData currentFish;
 
     [Header("Slider Minigame Settings")]
     [SerializeField] private float sliderMinigameSpeedFactor;
@@ -52,11 +55,13 @@ public class LevelManager : MonoBehaviour
     void Start()
     {
         AudioManager.instance.PlaySound("OceanSound");
-        ResetMiniGameSettings();
+        ResetMiniGameSettings(null);
     }
 
-    void ResetMiniGameSettings()
+    void ResetMiniGameSettings(FishData minigameFish)
     {
+        currentFish = minigameFish;
+
         sliderTimer = sliderTimerMax;
 
         spawnedCubes = 0;
@@ -97,17 +102,18 @@ public class LevelManager : MonoBehaviour
 
             if (remainingCubes == 0)
             {
-                Debug.Log("Correct Slices: " + correctSlices);
-                Debug.Log("Total Cubes: " + totalCubes);
                 EndMiniGame(correctSlices / totalCubes >= correctSlicePercentage);
             }
         }
     }
 
-    public void StartMiniGame()
+    public void StartMiniGame(FishData minigameFish)
     {
-        ResetMiniGameSettings();
+        ResetMiniGameSettings(minigameFish);
         currentMinigame = (MinigameEnum)UnityEngine.Random.Range(0, 2);
+
+        Debug.Log("[MINIGAME] " + currentMinigame.ToString() + " started");
+        Debug.Log("[FISH] " + minigameFish.fishName);
 
         UIManager.instance.SetCanvasState(CanvasEnum.Minigame, UIStateEnum.Enable);
         if (currentMinigame == MinigameEnum.Slider)
@@ -161,8 +167,12 @@ public class LevelManager : MonoBehaviour
 
         if (win)
         {
+            if (currentFish != null)
+            {
+                playerCollection.AddFish(currentFish.fishID);
+            }
             hook.LaunchFish();
-            Debug.Log("Win");
+            currentFish = null;
         }
         else
         {

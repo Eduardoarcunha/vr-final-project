@@ -36,7 +36,10 @@ public class FishRod : MonoBehaviour
     [Header("Other References")]
     [SerializeField] public Transform rodTipTransform;
     [SerializeField] private Transform rodMidTransform;
+    [SerializeField] private XRSocketTagInteractor socketInteractor;
     private XRGrabInteractable grabInteractable;
+
+    private Vector3 startRotation;
 
 
     void Awake()
@@ -54,10 +57,40 @@ public class FishRod : MonoBehaviour
     {
         previousHookPosition = hookRigidbody.position;
         lastKnobValue = reelKnob.value;
+
+        startRotation = transform.rotation.eulerAngles;
     }
+
+    public void OnSelectEnter(SelectEnterEventArgs args)
+    {
+        if (args.interactorObject is XRDirectInteractor)
+        {
+            grabInteractable.trackRotation = true;
+        }
+        else if (args.interactorObject is XRSocketTagInteractor)
+        {
+            grabInteractable.trackRotation = false;
+            gameObject.transform.rotation = Quaternion.Euler(startRotation);
+        }
+    }
+
+    // public void OnSelectExit(SelectExitEventArgs args)
+    // {
+    //     if (args.interactorObject is XRDirectInteractor)
+    //     {
+    //         grabInteractable.trackRotation = false;
+    //         socketInteractor.StartManualInteraction(grabInteractable);
+    //     }
+    // }
+
 
     void Update()
     {
+        if (!grabInteractable.isSelected)
+        {
+            socketInteractor.StartManualInteraction(grabInteractable);
+        }
+
         UpdateLinePositions();
 
         if (Mathf.Abs(reelKnob.value - lastKnobValue) > reelKnobTreshold)
