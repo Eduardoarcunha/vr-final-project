@@ -4,26 +4,43 @@ using UnityEngine;
 
 public class PlayerCollection : MonoBehaviour
 {
-    public List<int> collectedFish = new List<int>();
+    public Dictionary<int, int> collectedFish = new Dictionary<int, int>();
 
     public void AddFish(int fishID)
     {
-        if (!collectedFish.Contains(fishID))
+        if (collectedFish.ContainsKey(fishID))
         {
-            collectedFish.Add(fishID);
+            collectedFish[fishID]++;
+        }
+        else
+        {
+            collectedFish[fishID] = 1;
         }
     }
 
     public void RemoveFish(int fishID)
     {
-        if (collectedFish.Contains(fishID))
+        if (collectedFish.ContainsKey(fishID))
         {
-            collectedFish.Remove(fishID);
+            collectedFish[fishID]--;
+            if (collectedFish[fishID] <= 0)
+            {
+                collectedFish.Remove(fishID);
+            }
         }
     }
 
     public bool HasFish(int fishID)
     {
-        return collectedFish.Contains(fishID);
+        return collectedFish.ContainsKey(fishID);
+    }
+
+    public int GetFishCount(int fishID)
+    {
+        if (collectedFish.ContainsKey(fishID))
+        {
+            return collectedFish[fishID];
+        }
+        return 0;
     }
 }

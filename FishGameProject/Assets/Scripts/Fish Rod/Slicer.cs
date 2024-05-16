@@ -20,6 +20,7 @@ public class Slicer : MonoBehaviour
             SlicedHull slicedObject = other.gameObject.Slice(pointOfContact, slicePlane, sliceMaterial);
             if (slicedObject != null)
             {
+                AudioManager.instance.PlaySound("Slice");
                 GameObject upperHull = slicedObject.CreateUpperHull(other.gameObject, sliceMaterial);
                 GameObject lowerHull = slicedObject.CreateLowerHull(other.gameObject, sliceMaterial);
 

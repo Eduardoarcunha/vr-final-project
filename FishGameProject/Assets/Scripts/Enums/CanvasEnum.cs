@@ -6,5 +6,6 @@ using UnityEngine.UI;
 public enum CanvasEnum
 {
     Collection,
-    Minigame
+    Minigame,
+    FishCaught
 }

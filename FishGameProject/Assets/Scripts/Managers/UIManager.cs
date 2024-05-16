@@ -14,20 +14,30 @@ public class UIManager : MonoBehaviour
     private Dictionary<CanvasEnum, GameObject> canvasMap;
     [SerializeField] private GameObject collectionCanvas;
     [SerializeField] private GameObject minigameCanvas;
+    [SerializeField] private GameObject FishCaughtCanvas;
     [HideInInspector] public CollectionCanvas collectionCanvasScript;
     [HideInInspector] public MinigameCanvas minigameCanvasScript;
+    [HideInInspector] public FishCaughtCanvas fishCaughtCanvasScript;
+
 
     [Header("UI Canvas Settings")]
     [SerializeField] private UICanvasSettings collectionCanvasSettings;
     [SerializeField] private UICanvasSettings sliderMinigameCanvasSettings;
     [SerializeField] private UICanvasSettings beatFishMinigameCanvasSettings;
+    [SerializeField] private UICanvasSettings fishCaughtCanvasSettings;
+
     private Vector3 desiredPosition;
     private Vector3 directionToFace;
     private Quaternion desiredRotation;
 
-    private float initialCanvasY;
-
     private Dictionary<GameObject, float> initialYPositions = new Dictionary<GameObject, float>();
+
+
+    [Header("UI Color Settings")]
+    public Color commonColor;
+    public Color uncommonColor;
+    public Color rareColor;
+    public Color legendaryColor;
 
 
     void Awake()
@@ -35,6 +45,7 @@ public class UIManager : MonoBehaviour
         if (instance == null)
         {
             instance = this;
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -44,14 +55,17 @@ public class UIManager : MonoBehaviour
         canvasMap = new Dictionary<CanvasEnum, GameObject>()
         {
             { CanvasEnum.Collection, collectionCanvas },
-            { CanvasEnum.Minigame, minigameCanvas }
+            { CanvasEnum.Minigame, minigameCanvas },
+            { CanvasEnum.FishCaught, FishCaughtCanvas }
         };
 
         collectionCanvasScript = collectionCanvas.GetComponent<CollectionCanvas>();
         minigameCanvasScript = minigameCanvas.GetComponent<MinigameCanvas>();
+        fishCaughtCanvasScript = FishCaughtCanvas.GetComponent<FishCaughtCanvas>();
 
         initialYPositions[collectionCanvas] = collectionCanvas.transform.position.y;
         initialYPositions[minigameCanvas] = minigameCanvas.transform.position.y;
+        initialYPositions[FishCaughtCanvas] = FishCaughtCanvas.transform.position.y;
     }
 
     public void SetCanvasState(CanvasEnum canvasEnum, UIStateEnum state)
@@ -84,13 +98,13 @@ public class UIManager : MonoBehaviour
                 break;
         }
 
-        initialCanvasY = canvas.transform.position.y;
     }
 
     void Update()
     {
         MoveCanvas(collectionCanvas, collectionCanvasSettings);
         MoveCanvas(minigameCanvas, GetCurrentMinigameSettings());
+        MoveCanvas(FishCaughtCanvas, fishCaughtCanvasSettings);
     }
 
     private void MoveCanvasToInitialPosition(GameObject canvas, UICanvasSettings settings)
@@ -106,6 +120,8 @@ public class UIManager : MonoBehaviour
     {
         if (canvas == collectionCanvas)
             return collectionCanvasSettings;
+        else if (canvas == FishCaughtCanvas)
+            return fishCaughtCanvasSettings;
         else if (canvas == minigameCanvas)
             return GetCurrentMinigameSettings();
 
@@ -129,7 +145,7 @@ public class UIManager : MonoBehaviour
     {
         if (!canvas.activeSelf) return;
 
-        desiredPosition = head.position + head.forward * settings.spawnDistance + head.right * settings.rightOffset;
+        desiredPosition = head.position + head.forward * settings.spawnDistance + head.right * settings.rightOffset + head.up * settings.upOffset;
         if (settings.limitYRange)
         {
             desiredPosition.y = Mathf.Clamp(desiredPosition.y, initialYPositions[canvas] - settings.minY, initialYPositions[canvas] + settings.maxY);

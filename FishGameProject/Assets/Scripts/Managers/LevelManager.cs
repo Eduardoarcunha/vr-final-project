@@ -16,7 +16,7 @@ public class LevelManager : MonoBehaviour
     public PlayerCollection playerCollection;
     public FishCollection fishCollection;
 
-    private FishData currentFish;
+    [HideInInspector] public FishData currentFish;
 
     [Header("Slider Minigame Settings")]
     [SerializeField] private float sliderMinigameSpeedFactor;
@@ -112,8 +112,8 @@ public class LevelManager : MonoBehaviour
         ResetMiniGameSettings(minigameFish);
         currentMinigame = (MinigameEnum)UnityEngine.Random.Range(0, 2);
 
-        Debug.Log("[MINIGAME] " + currentMinigame.ToString() + " started");
-        Debug.Log("[FISH] " + minigameFish.fishName);
+        // Debug.Log("[MINIGAME] " + currentMinigame.ToString() + " started");
+        // Debug.Log("[FISH] " + minigameFish.fishName);
 
         UIManager.instance.SetCanvasState(CanvasEnum.Minigame, UIStateEnum.Enable);
         if (currentMinigame == MinigameEnum.Slider)
@@ -170,6 +170,8 @@ public class LevelManager : MonoBehaviour
             if (currentFish != null)
             {
                 playerCollection.AddFish(currentFish.fishID);
+                UIManager.instance.SetCanvasState(CanvasEnum.FishCaught, UIStateEnum.Enable);
+                AudioManager.instance.PlaySound("FishCaught");
             }
             hook.LaunchFish();
             currentFish = null;
