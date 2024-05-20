@@ -7,6 +7,7 @@ public class UICanvasSettings : ScriptableObject
     public float spawnDistance;
     public float positionLerpSpeed;
     public float rotationLerpSpeed;
+    public float upOffset;
     public float rightOffset;
     public bool limitYRange;
     public float minY;

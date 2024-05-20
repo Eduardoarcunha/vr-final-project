@@ -13,12 +13,8 @@ public class FishInfoPanel : Panel
     public TextMeshProUGUI fishName;
     public TextMeshProUGUI rarityText;
     public TextMeshProUGUI habitatText;
+    public TextMeshProUGUI collectedText;
 
-    [Header("Color Settings")]
-    public Color commonColor;
-    public Color uncommonColor;
-    public Color rareColor;
-    public Color legendaryColor;
 
     public void SetFishData(FishData fishData)
     {
@@ -31,6 +27,8 @@ public class FishInfoPanel : Panel
         rarityText.text = "<size=70%>Rarity</size>\n" + colorTag + fishData.rarity.ToString() + "</color>";
 
         habitatText.text = "<size=70%>Habitat</size>\n" + fishData.habitat.ToString();
+
+        collectedText.text = "<size=70%>Collected</size>\n" + LevelManager.instance.playerCollection.GetFishCount(fishData.fishID);
     }
 
     private string GetColorForRarity(Rarity rarity)
@@ -39,16 +37,16 @@ public class FishInfoPanel : Panel
         switch (rarity)
         {
             case Rarity.Common:
-                color = commonColor;
+                color = UIManager.instance.commonColor;
                 break;
             case Rarity.Uncommon:
-                color = uncommonColor;
+                color = UIManager.instance.uncommonColor;
                 break;
             case Rarity.Rare:
-                color = rareColor;
+                color = UIManager.instance.rareColor;
                 break;
             case Rarity.Legendary:
-                color = legendaryColor;
+                color = UIManager.instance.legendaryColor;
                 break;
             default:
                 color = new Color(0.5f, 0.5f, 0.5f);
