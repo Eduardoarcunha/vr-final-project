@@ -14,19 +14,19 @@ OcclusionCullingSettings:
 RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 9
-  m_Fog: 0
-  m_FogColor: {r: 0.952284, g: 0.777556, b: 0.6149295, a: 1}
+  m_Fog: 1
+  m_FogColor: {r: 0.687168, g: 0.75486755, b: 0.9739387, a: 1}
   m_FogMode: 3
   m_FogDensity: 0.01
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 0.85492724, g: 0.8720226, b: 0.68924224, a: 1}
+  m_AmbientSkyColor: {r: 1, g: 0.9999649, b: 0.99221206, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 1
   m_AmbientMode: 3
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  m_SkyboxMaterial: {fileID: 2100000, guid: efd1c33efd2d58340b88804268e6833f, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -37,8 +37,8 @@ RenderSettings:
   m_ReflectionBounces: 1
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
-  m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.17387804, g: 0.21740973, b: 0.29956746, a: 1}
+  m_Sun: {fileID: 410087040}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -9913,7 +9913,7 @@ PrefabInstance:
     - target: {fileID: 5384330016719077637, guid: add2b3ff2646b66448c25dcfbb0bfe84,
         type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 5384330016719077637, guid: add2b3ff2646b66448c25dcfbb0bfe84,
         type: 3}
@@ -10008,7 +10008,7 @@ PrefabInstance:
     - target: {fileID: 7394984673231374074, guid: add2b3ff2646b66448c25dcfbb0bfe84,
         type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 7394984673231374074, guid: add2b3ff2646b66448c25dcfbb0bfe84,
         type: 3}
@@ -14880,7 +14880,7 @@ Light:
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
-  m_Color: {r: 0.5749912, g: 0.5749912, b: 0.5749912, a: 1}
+  m_Color: {r: 0.9916515, g: 0.9916515, b: 0.9916515, a: 1}
   m_Intensity: 2
   m_Range: 10
   m_SpotAngle: 30
@@ -14939,7 +14939,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 410087039}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.06844492, y: 0.61673814, z: -0.7823285, w: 0.05395763}
+  m_LocalRotation: {x: 0.08714834, y: 0.0130399065, z: -0.99610937, w: 0.0011408448}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -33789,6 +33789,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: LightingManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 7045898152354707052, guid: 408a8093a018fd547ad58d53bd6731ae,
+        type: 3}
+      propertyPath: TimeOfDay
+      value: 11.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 7045898152354707052, guid: 408a8093a018fd547ad58d53bd6731ae,
+        type: 3}
+      propertyPath: SkyboxMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: efd1c33efd2d58340b88804268e6833f, type: 2}
+    - target: {fileID: 7045898152354707052, guid: 408a8093a018fd547ad58d53bd6731ae,
+        type: 3}
+      propertyPath: TimeMultiplier
+      value: 0.05
       objectReference: {fileID: 0}
     - target: {fileID: 7045898152354707052, guid: 408a8093a018fd547ad58d53bd6731ae,
         type: 3}

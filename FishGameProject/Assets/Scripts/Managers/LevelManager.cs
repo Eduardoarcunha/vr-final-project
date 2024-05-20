@@ -11,8 +11,8 @@ public class LevelManager : MonoBehaviour
     private Coroutine miniGameCoroutine;
 
     [SerializeField] public FishRod fishRod;
-    [SerializeField] private Hook hook;
-    public Transform head;
+    private Hook hook;
+    private Transform head;
     public PlayerCollection playerCollection;
     public FishCollection fishCollection;
 
@@ -49,10 +49,13 @@ public class LevelManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        hook = fishRod.GetComponent<FishRod>().hookGameObject.GetComponent<Hook>();
     }
 
     void Start()
     {
+        head = UIManager.instance.head;
         AudioManager.instance.PlaySound("OceanSound");
         ResetMiniGameSettings(null);
     }

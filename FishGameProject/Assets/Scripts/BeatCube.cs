@@ -43,8 +43,8 @@ public class BeatCube : MonoBehaviour
     void Update()
     {
         Vector3 downOffset = new Vector3(0, 0.5f, 0);
-        Vector3 directionToFace = (LevelManager.instance.head.position - transform.position).normalized;
-        Vector3 directionToFaceWithOffset = (LevelManager.instance.head.position - transform.position - downOffset).normalized;
+        Vector3 directionToFace = (UIManager.instance.head.position - transform.position).normalized;
+        Vector3 directionToFaceWithOffset = (UIManager.instance.head.position - transform.position - downOffset).normalized;
 
         Quaternion desiredRotation = Quaternion.LookRotation(directionToFace);
         transform.rotation = Quaternion.Slerp(transform.rotation, desiredRotation, Time.deltaTime * 5f);
@@ -52,7 +52,7 @@ public class BeatCube : MonoBehaviour
         Vector3 moveDirection = directionToFaceWithOffset;
         transform.position += moveDirection * cubeSpeed * Time.deltaTime;
 
-        if (Vector3.Distance(transform.position, LevelManager.instance.head.position) < cubeToPlayerMinDistance)
+        if (Vector3.Distance(transform.position, UIManager.instance.head.position) < cubeToPlayerMinDistance)
         {
             if (LevelManager.instance.currentMinigame == MinigameEnum.BeatFish)
             {

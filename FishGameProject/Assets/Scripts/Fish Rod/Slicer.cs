@@ -8,7 +8,7 @@ public class Slicer : MonoBehaviour
     [SerializeField] private FishRod fishRod;
     [SerializeField] private Material sliceMaterial;
 
-    public void OnTriggerEnter(Collider other)
+    void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Slice Cube"))
         {
@@ -20,7 +20,7 @@ public class Slicer : MonoBehaviour
             SlicedHull slicedObject = other.gameObject.Slice(pointOfContact, slicePlane, sliceMaterial);
             if (slicedObject != null)
             {
-                AudioManager.instance.PlaySound("Slice");
+                AudioManager.instance.PlaySound("SliceCube");
                 GameObject upperHull = slicedObject.CreateUpperHull(other.gameObject, sliceMaterial);
                 GameObject lowerHull = slicedObject.CreateLowerHull(other.gameObject, sliceMaterial);
 
@@ -29,6 +29,7 @@ public class Slicer : MonoBehaviour
 
                 upperHull.AddComponent<Rigidbody>();
                 lowerHull.AddComponent<Rigidbody>();
+
 
                 // Call coroutine to destroy the object after 5 seconds
                 StartCoroutine(DestroyObject(upperHull, 15f));
@@ -45,6 +46,35 @@ public class Slicer : MonoBehaviour
             }
 
             Destroy(other.gameObject);
+        }
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Fish"))
+        {
+            Vector3 slicePlane = fishRod.GetSlicePlane();
+            Vector3 pointOfContact = collision.contacts[0].point;
+
+            SlicedHull slicedObject = collision.gameObject.Slice(pointOfContact, slicePlane, sliceMaterial);
+            if (slicedObject != null)
+            {
+                AudioManager.instance.PlaySound("SliceFish");
+                GameObject upperHull = slicedObject.CreateUpperHull(collision.gameObject, sliceMaterial);
+                GameObject lowerHull = slicedObject.CreateLowerHull(collision.gameObject, sliceMaterial);
+
+                upperHull.AddComponent<MeshCollider>().convex = true;
+                lowerHull.AddComponent<MeshCollider>().convex = true;
+
+                upperHull.AddComponent<Rigidbody>();
+                lowerHull.AddComponent<Rigidbody>();
+
+                // Call coroutine to destroy the object after 5 seconds
+                StartCoroutine(DestroyObject(upperHull, 15f));
+                StartCoroutine(DestroyObject(lowerHull, 15f));
+            }
+
+            Destroy(collision.gameObject);
         }
     }
 

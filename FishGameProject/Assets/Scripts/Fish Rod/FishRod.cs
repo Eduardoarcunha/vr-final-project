@@ -22,7 +22,7 @@ public class FishRod : MonoBehaviour
     private float lastKnobValue;
 
     [Header("Hook")]
-    [SerializeField] private GameObject hookGameObject;
+    public GameObject hookGameObject;
     [SerializeField] private Transform hookReturnPosition;
 
     private Transform hookTransform;
@@ -184,9 +184,11 @@ public class FishRod : MonoBehaviour
     private float CalculateForceBasedOnVelocityChange(Vector3 velocityChange)
     {
         float magnitude = velocityChange.magnitude;
-        if (magnitude <= 10) return 2;
-        if (magnitude <= 60) return 8;
-        return 10;
+        if (magnitude <= 5) return 4;
+        if (magnitude <= 10) return 8;
+        if (magnitude <= 30) return 16;
+        if (magnitude <= 60) return 32;
+        return 40;
     }
 
 

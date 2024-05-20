@@ -75,7 +75,13 @@ MonoBehaviour:
     pitch: 1
     loop: 0
     source: {fileID: 0}
-  - name: Slice
+  - name: SliceCube
+    clip: {fileID: 8300000, guid: 5a913966631e5184ebfcc74a906bc8aa, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: SliceFish
     clip: {fileID: 8300000, guid: e05cb0b555d3cfe41acb0bd597be415f, type: 3}
     volume: 1
     pitch: 1
@@ -89,6 +95,12 @@ MonoBehaviour:
     source: {fileID: 0}
   - name: UIHoverEnter
     clip: {fileID: 8300000, guid: c00193f69f150124cbf3f5671b986b63, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: WaterSplash
+    clip: {fileID: 8300000, guid: ab0a79558e977c5438874f5b3a6d151f, type: 3}
     volume: 1
     pitch: 1
     loop: 0

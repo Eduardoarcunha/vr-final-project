@@ -20,11 +20,10 @@ public class Hook : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Hook Triggered");
 
         if (other.CompareTag("Fish Spot") && !onWater && !onFloor && LevelManager.instance.currentMinigame == MinigameEnum.None && LevelManager.instance.fishRod.isHookThrown)
         {
-            Debug.Log("Fish Spot");
+            AudioManager.instance.PlaySound("WaterSplash");
             onWater = true;
             FreezeHook();
             FishSpot fishSpot = other.GetComponent<FishSpot>();
@@ -33,6 +32,7 @@ public class Hook : MonoBehaviour
         }
         else if (other.CompareTag("Water") && !onWater && !onFloor && LevelManager.instance.currentMinigame == MinigameEnum.None && LevelManager.instance.fishRod.isHookThrown)
         {
+            AudioManager.instance.PlaySound("WaterSplash");
             onWater = true;
             FreezeHook();
             FishData fish = LevelManager.instance.fishCollection.GetRandomFish();
@@ -63,7 +63,7 @@ public class Hook : MonoBehaviour
         GameObject fish = Instantiate(fishPrefab, transform.position, Quaternion.identity);
         Rigidbody fishRigidbody = fish.GetComponent<Rigidbody>();
 
-        Vector3 targetDirection = LevelManager.instance.head.position - transform.position;
+        Vector3 targetDirection = UIManager.instance.head.position - transform.position;
         float distance = targetDirection.magnitude;
         Vector3 targetWithHeight = targetDirection + Vector3.up * distance * heightFactor;
 

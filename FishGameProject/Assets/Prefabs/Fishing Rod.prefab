@@ -294,8 +294,10 @@ MonoBehaviour:
   reelKnobTreshold: 0.01
   hookGameObject: {fileID: 2954894983443229366}
   hookReturnPosition: {fileID: 808175583535436010}
+  isHookThrown: 0
   rodTipTransform: {fileID: 7009684440695785644}
   rodMidTransform: {fileID: 391855821004771760}
+  socketInteractor: {fileID: 0}
 --- !u!114 &3924175493828059809
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -547,7 +549,7 @@ MonoBehaviour:
   onWater: 0
   fishPrefab: {fileID: 342786271704006503, guid: eb104902ba0e92345994c168f17d4646,
     type: 3}
-  launchPower: 10
+  launchPower: 6
   heightFactor: 2
 --- !u!1 &3024454714302519643
 GameObject:

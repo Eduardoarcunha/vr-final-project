@@ -8,7 +8,7 @@ public class UIManager : MonoBehaviour
     public static UIManager instance;
 
     [Header("References")]
-    [SerializeField] private Transform head;
+    public Transform head;
 
     [Header("UI Canvases")]
     private Dictionary<CanvasEnum, GameObject> canvasMap;

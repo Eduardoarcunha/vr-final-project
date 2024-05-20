@@ -6,10 +6,16 @@ public class LightingManager : MonoBehaviour
     [Header("References")]
     [SerializeField] private Light DirectionalLight;
     [SerializeField] private LightingPreset Preset;
+    [SerializeField] private Material SkyboxMaterial;
 
     [Header("Time of Day")]
     [SerializeField, Range(0, 24)] private float TimeOfDay;
-    [SerializeField, Range(0.1f, 10f)] private float TimeMultiplier = 1f;
+    [SerializeField, Range(0.05f, 10f)] private float TimeMultiplier;
+
+    private static readonly int Rotation = Shader.PropertyToID("_Rotation");
+    private static readonly int Exposure = Shader.PropertyToID("_Exposure");
+
+    private float cumulativeRotation = 0f;
 
     private void Update()
     {
@@ -22,10 +28,12 @@ public class LightingManager : MonoBehaviour
             TimeOfDay += Time.deltaTime * TimeMultiplier;
             TimeOfDay %= 24; // Modulus to ensure always between 0-24
             UpdateLighting(TimeOfDay / 24f);
+            UpdateSkybox(TimeOfDay / 24f);
         }
         else
         {
             UpdateLighting(TimeOfDay / 24f);
+            UpdateSkybox(TimeOfDay / 24f);
         }
     }
 
@@ -40,6 +48,19 @@ public class LightingManager : MonoBehaviour
         {
             DirectionalLight.color = Preset.DirectionalColor.Evaluate(timePercent);
             DirectionalLight.transform.localRotation = Quaternion.Euler(new Vector3((timePercent * 360f), 170f, 0));
+        }
+    }
+
+    private void UpdateSkybox(float timePercent)
+    {
+        if (SkyboxMaterial != null)
+        {
+            float rotationSpeed = 2f;
+            cumulativeRotation += Time.deltaTime * TimeMultiplier * rotationSpeed;
+            SkyboxMaterial.SetFloat(Rotation, cumulativeRotation);
+
+            float exposure = Mathf.Clamp01(Mathf.Cos(timePercent * Mathf.PI * 2 - Mathf.PI) * 0.5f + 0.5f);
+            SkyboxMaterial.SetFloat(Exposure, exposure);
         }
     }
 

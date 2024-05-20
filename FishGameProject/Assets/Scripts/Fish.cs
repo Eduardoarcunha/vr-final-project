@@ -14,7 +14,7 @@ public class Fish : MonoBehaviour
 
     void Update()
     {
-        if (Vector3.Distance(transform.position, LevelManager.instance.head.position) < fishToPlayerMinDistance)
+        if (Vector3.Distance(transform.position, UIManager.instance.head.position) < fishToPlayerMinDistance)
         {
             Destroy(gameObject);
         }
