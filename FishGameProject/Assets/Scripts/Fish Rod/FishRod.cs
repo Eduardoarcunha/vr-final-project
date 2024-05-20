@@ -28,7 +28,7 @@ public class FishRod : MonoBehaviour
     private Transform hookTransform;
     private Hook hook;
     private Rigidbody hookRigidbody;
-    private bool isHookThrown = false;
+    [HideInInspector] public bool isHookThrown = false;
     private Vector3 previousHookPosition;
     public Vector3 currentHookVelocity { get; private set; }
     private float throwForce;
@@ -74,20 +74,11 @@ public class FishRod : MonoBehaviour
         }
     }
 
-    // public void OnSelectExit(SelectExitEventArgs args)
-    // {
-    //     if (args.interactorObject is XRDirectInteractor)
-    //     {
-    //         grabInteractable.trackRotation = false;
-    //         socketInteractor.StartManualInteraction(grabInteractable);
-    //     }
-    // }
-
-
     void Update()
     {
         if (!grabInteractable.isSelected)
         {
+            LevelManager.instance.EndMiniGame(false);
             socketInteractor.StartManualInteraction(grabInteractable);
         }
 

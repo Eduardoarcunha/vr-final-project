@@ -503,8 +503,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 771b6127155f8ad4faeb351f6843b1b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  crossSectionMaterial: {fileID: 2100000, guid: b1f0fa6f36af489449bf38bbc702bdfb,
-    type: 2}
+  cubeSpeed: 0.5
   requiredSliceDirection: {x: 0, y: 0, z: 0}
   indicators:
   - {fileID: 1685945634484956655}
@@ -516,7 +515,7 @@ MonoBehaviour:
   - {fileID: 2673465338613861564}
   - {fileID: 7176399275074456823}
   - {fileID: 7288415989075518924}
-  cubeSpeed: 0.5
+  cubeToPlayerMinDistance: 1
 --- !u!1 &5988051534227586156
 GameObject:
   m_ObjectHideFlags: 0

@@ -10,7 +10,7 @@ public class LevelManager : MonoBehaviour
     public MinigameEnum currentMinigame = MinigameEnum.None;
     private Coroutine miniGameCoroutine;
 
-    [SerializeField] private FishRod fishRod;
+    [SerializeField] public FishRod fishRod;
     [SerializeField] private Hook hook;
     public Transform head;
     public PlayerCollection playerCollection;
@@ -43,7 +43,6 @@ public class LevelManager : MonoBehaviour
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject);
 
         }
         else

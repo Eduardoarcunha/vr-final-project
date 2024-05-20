@@ -50,7 +50,8 @@ MonoBehaviour:
   hook: {fileID: 0}
   head: {fileID: 0}
   playerCollection: {fileID: 0}
-  fishCollection: {fileID: 0}
+  fishCollection: {fileID: 1004311204413545801}
+  currentFish: {fileID: 0}
   sliderMinigameSpeedFactor: 10
   sliderMinigameCloseColor: {r: 0.37254903, g: 0.64705884, b: 0.64705884, a: 1}
   sliderMinigameFarColor: {r: 1, g: 0.5294118, b: 0.28627452, a: 1}

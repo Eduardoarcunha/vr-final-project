@@ -54,6 +54,10 @@ public class BeatCube : MonoBehaviour
 
         if (Vector3.Distance(transform.position, LevelManager.instance.head.position) < cubeToPlayerMinDistance)
         {
+            if (LevelManager.instance.currentMinigame == MinigameEnum.BeatFish)
+            {
+                LevelManager.instance.CubeSliced(false);
+            }
             Destroy(gameObject);
         }
     }

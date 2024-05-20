@@ -30,6 +30,10 @@ public class Slicer : MonoBehaviour
                 upperHull.AddComponent<Rigidbody>();
                 lowerHull.AddComponent<Rigidbody>();
 
+                // Call coroutine to destroy the object after 5 seconds
+                StartCoroutine(DestroyObject(upperHull, 15f));
+                StartCoroutine(DestroyObject(lowerHull, 15f));
+
                 if (IsCorrectDirection(fishRod.currentFishRodVelocity, requiredSliceDirection))
                 {
                     LevelManager.instance.CubeSliced(true);
@@ -52,5 +56,13 @@ public class Slicer : MonoBehaviour
         // Debug.Log(Vector3.Dot(incomingDirection, requiredDirection));
         float dotProduct = Vector3.Dot(incomingDirection, requiredDirection);
         return dotProduct > threshold;
+    }
+
+    private IEnumerator DestroyObject(GameObject obj, float time)
+    {
+        // Check if the object was already destroyed
+        if (obj == null) yield break;
+        yield return new WaitForSeconds(time);
+        Destroy(obj);
     }
 }

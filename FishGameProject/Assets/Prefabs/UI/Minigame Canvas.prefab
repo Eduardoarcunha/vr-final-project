@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8493900731821715511}
   - component: {fileID: 5364373934019054225}
   - component: {fileID: 3254142652853746778}
-  m_Layer: 5
+  m_Layer: 12
   m_Name: Handle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -32,8 +32,8 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 8366556949607209503}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.421, y: 0}
-  m_AnchorMax: {x: 0.421, y: 1}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 5.099991, y: 0}
   m_SizeDelta: {x: 30.3, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -86,7 +86,7 @@ GameObject:
   - component: {fileID: 6552925133491660660}
   - component: {fileID: 3648058915702723390}
   - component: {fileID: 3554133274438452344}
-  m_Layer: 7
+  m_Layer: 12
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -162,7 +162,7 @@ GameObject:
   - component: {fileID: 4884909481719381261}
   - component: {fileID: 6767536760213912789}
   - component: {fileID: 4779702383861997292}
-  m_Layer: 5
+  m_Layer: 12
   m_Name: Handle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -184,8 +184,8 @@ RectTransform:
   - {fileID: 9217369789265739532}
   m_Father: {fileID: 6227280185432694830}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.725, y: 0}
-  m_AnchorMax: {x: 0.725, y: 1}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 30, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -236,7 +236,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6429985708867947056}
-  m_Layer: 7
+  m_Layer: 12
   m_Name: Slider Minigame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -274,7 +274,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9213871227144825062}
   - component: {fileID: 3246937223871167192}
-  m_Layer: 5
+  m_Layer: 12
   m_Name: Player Slider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -364,7 +364,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3906611023174306459}
   - component: {fileID: 8646368047625671900}
-  m_Layer: 5
+  m_Layer: 12
   m_Name: Fish Slider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -453,7 +453,7 @@ GameObject:
   - component: {fileID: 9210184934235672830}
   - component: {fileID: 3873900074677587222}
   - component: {fileID: 2346555409626989882}
-  m_Layer: 5
+  m_Layer: 12
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -531,7 +531,7 @@ GameObject:
   - component: {fileID: 3812950362797395341}
   - component: {fileID: 351950318335618885}
   - component: {fileID: 4143714507895639205}
-  m_Layer: 7
+  m_Layer: 12
   m_Name: Minigame Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -669,7 +669,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1592978567832313149}
-  m_Layer: 5
+  m_Layer: 12
   m_Name: Fill Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -705,7 +705,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2455036347616190503}
-  m_Layer: 7
+  m_Layer: 12
   m_Name: BeatFish Minigame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -743,7 +743,7 @@ GameObject:
   - component: {fileID: 4569591726273305811}
   - component: {fileID: 3153495121335336909}
   - component: {fileID: 3495803743788693308}
-  m_Layer: 5
+  m_Layer: 12
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -765,7 +765,7 @@ RectTransform:
   m_Father: {fileID: 1592978567832313149}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0.421, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -818,7 +818,7 @@ GameObject:
   - component: {fileID: 4158278709185087613}
   - component: {fileID: 8351498195977685746}
   - component: {fileID: 7013967434560519567}
-  m_Layer: 7
+  m_Layer: 12
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -953,7 +953,7 @@ GameObject:
   - component: {fileID: 8635602016068782921}
   - component: {fileID: 1678326795456241966}
   - component: {fileID: 1707609222974548315}
-  m_Layer: 5
+  m_Layer: 12
   m_Name: Fish Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1044,7 +1044,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8366556949607209503}
-  m_Layer: 5
+  m_Layer: 12
   m_Name: Handle Slide Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1080,7 +1080,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6227280185432694830}
-  m_Layer: 5
+  m_Layer: 12
   m_Name: Handle Slide Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}
