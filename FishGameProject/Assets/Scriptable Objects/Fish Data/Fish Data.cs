@@ -15,7 +15,7 @@ public enum Habitat
 {
     DrownedForest,
     AridWaterways,
-    CoralReef,
+    StoneWaters,
 }
 
 [CreateAssetMenu(fileName = "FishData", menuName = "ScriptableObjects/FishData", order = 1)]

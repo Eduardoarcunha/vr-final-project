@@ -9,8 +9,8 @@ EditorBuildSettings:
     path: Assets/Scenes/Menu.unity
     guid: 99c9720ab356a0642a771bea13969a05
   - enabled: 1
-    path: Assets/Scenes/Integration.unity
-    guid: 45a446bc55a63cc4c91f0b12e1ffbef1
+    path: Assets/Scenes/MapDevelopment.unity
+    guid: 0a1240fe7dc10474789459a9c35f05b7
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 34b6cf4e70c78b74bb8af5a465f43f52,
       type: 2}

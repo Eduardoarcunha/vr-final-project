@@ -20,13 +20,16 @@ public class Hook : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log("Hook Triggered");
+
         if (other.CompareTag("Fish Spot") && !onWater && !onFloor && LevelManager.instance.currentMinigame == MinigameEnum.None && LevelManager.instance.fishRod.isHookThrown)
         {
             Debug.Log("Fish Spot");
             onWater = true;
             FreezeHook();
-            // FishSpot fishSpot = other.GetComponent<FishSpot>();
-            // fishSpot.CatchFish();
+            FishSpot fishSpot = other.GetComponent<FishSpot>();
+            FishData fish = LevelManager.instance.fishCollection.GetRandomFishByHabitat(fishSpot.habitat);
+            LevelManager.instance.StartMiniGame(fish);
         }
         else if (other.CompareTag("Water") && !onWater && !onFloor && LevelManager.instance.currentMinigame == MinigameEnum.None && LevelManager.instance.fishRod.isHookThrown)
         {
