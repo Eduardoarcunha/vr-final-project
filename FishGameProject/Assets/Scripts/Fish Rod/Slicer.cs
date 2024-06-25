@@ -30,8 +30,6 @@ public class Slicer : MonoBehaviour
                 upperHull.AddComponent<Rigidbody>();
                 lowerHull.AddComponent<Rigidbody>();
 
-
-                // Call coroutine to destroy the object after 5 seconds
                 StartCoroutine(DestroyObject(upperHull, 15f));
                 StartCoroutine(DestroyObject(lowerHull, 15f));
 
@@ -43,6 +41,10 @@ public class Slicer : MonoBehaviour
                 {
                     LevelManager.instance.CubeSliced(false);
                 }
+            }
+            else
+            {
+                LevelManager.instance.CubeSliced(false);
             }
 
             Destroy(other.gameObject);

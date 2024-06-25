@@ -9930,6 +9930,36 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5743424401629850981, guid: add2b3ff2646b66448c25dcfbb0bfe84,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5743424401629850981, guid: add2b3ff2646b66448c25dcfbb0bfe84,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5743424401629850981, guid: add2b3ff2646b66448c25dcfbb0bfe84,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5743424401629850981, guid: add2b3ff2646b66448c25dcfbb0bfe84,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.628
+      objectReference: {fileID: 0}
+    - target: {fileID: 5743424401629850981, guid: add2b3ff2646b66448c25dcfbb0bfe84,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.963
+      objectReference: {fileID: 0}
+    - target: {fileID: 5743424401629850981, guid: add2b3ff2646b66448c25dcfbb0bfe84,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.399
+      objectReference: {fileID: 0}
     - target: {fileID: 5785095554937917323, guid: add2b3ff2646b66448c25dcfbb0bfe84,
         type: 3}
       propertyPath: m_Layer
